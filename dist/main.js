@@ -439,6 +439,11 @@
       content: String(item.content || '').replace(new RegExp('^' + escapedTitle + '\\.\\s*', 'i'), ''),
       meta: [item.company, item.role, item.project].filter(Boolean).map(String).slice(0, 5),
       mediaUrl: String(item.mediaUrl || ''),
+      institution: String(item.institution || ''),
+      startDate: String(item.startDate || ''),
+      endDate: String(item.endDate || ''),
+      contactValue: String(item.contactValue || ''),
+      contactUrl: String(item.contactUrl || ''),
       tags: []
     };
   };
@@ -504,6 +509,18 @@
     return '';
   };
 
+  const formatDate = (value) => {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
+    const parsed = new Date(`${raw}T00:00:00`);
+    return Number.isNaN(parsed.getTime()) ? raw : new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric' }).format(parsed);
+  };
+  const formatDateRange = (start, end) => {
+    const startLabel = formatDate(start);
+    const endLabel = formatDate(end) || (startLabel ? 'Present' : '');
+    return startLabel && endLabel ? `${startLabel} — ${endLabel}` : startLabel || endLabel;
+  };
+
   const appendProject = (item, details) => {
     const projectGrid = document.querySelector('.project-grid');
     if (!projectGrid) return false;
@@ -536,7 +553,7 @@
     const timeline = document.querySelector('.timeline');
     if (!timeline) return false;
     const entry = node('article', 'timeline-item dynamic-timeline-item');
-    const date = node('div', 'timeline-date', 'Recently added');
+    const date = node('div', 'timeline-date', formatDateRange(details.startDate, details.endDate) || 'Recently added');
     const marker = node('div', 'timeline-marker');
     marker.append(node('span'));
     const copy = node('div', 'timeline-copy');
@@ -565,7 +582,9 @@
     const education = document.querySelector('.education');
     if (!education) return false;
     const copy = node('p');
-    copy.append(node('strong', '', details.title), document.createElement('br'), document.createTextNode(details.content));
+    const institution = details.institution || details.meta[0] || 'Education';
+    const dateRange = formatDateRange(details.startDate, details.endDate);
+    copy.append(node('strong', '', details.title), document.createElement('br'), document.createTextNode(institution + (dateRange ? ` · ${dateRange}` : '')), document.createElement('br'), document.createTextNode(details.content));
     education.parentElement?.append(node('div', 'education dynamic-education', ''));
     const entry = education.parentElement?.lastElementChild;
     if (!entry) return false;

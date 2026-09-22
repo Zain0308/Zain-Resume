@@ -9,7 +9,14 @@
   const manualList = $('#manualList');
   const deleteDialog = $('#deleteConfirm');
   const confirmDeleteButton = $('#confirmDelete');
+  const manualCategory = $('#manualCategory');
   const contentField = $('#manualContent')?.closest('.field');
+  const makeField = (id, label, type = 'text', placeholder = '') => {
+    const field = document.createElement('div');
+    field.className = 'field';
+    field.innerHTML = `<label for="${id}">${label}</label><input id="${id}" type="${type}"${placeholder ? ` placeholder="${placeholder}"` : ''} />`;
+    return field;
+  };
   if (contentField) {
     const stackField = document.createElement('div');
     stackField.className = 'field full';
@@ -18,10 +25,20 @@
     const mediaField = document.createElement('div');
     mediaField.className = 'field full';
     mediaField.innerHTML = '<label for="manualMediaUrl">Card image / GIF URL (optional)</label><input id="manualMediaUrl" maxlength="1000" type="url" placeholder="https://example.com/project-preview.gif" /><small style="display:block;margin-top:6px;color:#71829a;font-size:11px">Paste a direct image or GIF URL. It will appear at the top of this project card.</small>';
-    stackField.after(mediaField);
+    const institutionField = makeField('manualInstitution', 'Institution / university', 'text', 'Sindh Agriculture University');
+    const startDateField = makeField('manualStartDate', 'Start date', 'date');
+    const endDateField = makeField('manualEndDate', 'End date', 'date');
+    const contactValueField = makeField('manualContactValue', 'Contact value', 'text', 'email@example.com');
+    const contactUrlField = makeField('manualContactUrl', 'Contact URL', 'url', 'https://linkedin.com/in/username');
+    contentField.before(stackField, mediaField, institutionField, startDateField, endDateField, contactValueField, contactUrlField);
   }
   const manualStack = $('#manualStack');
   const manualMediaUrl = $('#manualMediaUrl');
+  const manualInstitution = $('#manualInstitution');
+  const manualStartDate = $('#manualStartDate');
+  const manualEndDate = $('#manualEndDate');
+  const manualContactValue = $('#manualContactValue');
+  const manualContactUrl = $('#manualContactUrl');
   let selectedFile = null;
   let manualItems = [];
   let pendingDelete = null;
@@ -31,6 +48,30 @@
     if (!element) return;
     element.textContent = message;
     element.className = `notice ${type}`.trim();
+  };
+  const setFieldVisible = (id, visible) => {
+    const field = document.querySelector(`#${id}`)?.closest('.field');
+    if (field) field.hidden = !visible;
+  };
+  const updateCategoryFields = () => {
+    const category = manualCategory?.value || 'profile';
+    const isProject = category === 'project';
+    const isExperience = category === 'experience';
+    const isSkills = category === 'skills';
+    const isEducation = category === 'education';
+    const isContact = category === 'contact';
+    setFieldVisible('manualCompany', isProject || isExperience);
+    setFieldVisible('manualRole', isExperience);
+    setFieldVisible('manualProject', isProject);
+    setFieldVisible('manualStack', isProject || isExperience || isSkills);
+    setFieldVisible('manualMediaUrl', isProject);
+    setFieldVisible('manualInstitution', isEducation);
+    setFieldVisible('manualStartDate', isExperience || isEducation);
+    setFieldVisible('manualEndDate', isExperience || isEducation);
+    setFieldVisible('manualContactValue', isContact);
+    setFieldVisible('manualContactUrl', isContact);
+    const companyLabel = document.querySelector('label[for="manualCompany"]');
+    if (companyLabel) companyLabel.textContent = isProject ? 'Company / client' : 'Company';
   };
   const formatDate = (value) => value ? new Date(value).toLocaleString() : 'Not indexed yet';
 
@@ -152,9 +193,15 @@
     manualKey.value = '';
     manualStack.value = '';
     manualMediaUrl.value = '';
+    manualInstitution.value = '';
+    manualStartDate.value = '';
+    manualEndDate.value = '';
+    manualContactValue.value = '';
+    manualContactUrl.value = '';
     $('#manualTitleInput').value = '';
     $('#cancelEdit').hidden = true;
     $('#saveManual').textContent = 'Save knowledge';
+    updateCategoryFields();
   }
   function renderManualItems() {
     manualList.replaceChildren();
@@ -181,11 +228,17 @@
         manualKey.value = item.chunkKey;
         $('#manualTitleInput').value = item.title || '';
         $('#manualCategory').value = item.category || 'project';
+        updateCategoryFields();
         $('#manualCompany').value = item.company || '';
         $('#manualRole').value = item.role || '';
         $('#manualProject').value = item.project || '';
         manualStack.value = Array.isArray(item.stack) ? item.stack.join(', ') : '';
         manualMediaUrl.value = item.mediaUrl || '';
+        manualInstitution.value = item.institution || '';
+        manualStartDate.value = item.startDate || '';
+        manualEndDate.value = item.endDate || '';
+        manualContactValue.value = item.contactValue || '';
+        manualContactUrl.value = item.contactUrl || '';
         $('#manualContent').value = item.content || '';
         $('#cancelEdit').hidden = false;
         $('#saveManual').textContent = 'Update knowledge';
@@ -255,6 +308,11 @@
       project: $('#manualProject').value.trim(),
       stack: manualStack.value.trim(),
       mediaUrl: manualMediaUrl.value.trim(),
+      institution: manualInstitution.value.trim(),
+      startDate: manualStartDate.value,
+      endDate: manualEndDate.value,
+      contactValue: manualContactValue.value.trim(),
+      contactUrl: manualContactUrl.value.trim(),
       content: $('#manualContent').value.trim()
     };
     try {
@@ -266,5 +324,7 @@
     finally { button.disabled = false; }
   });
 
+  manualCategory?.addEventListener('change', updateCategoryFields);
+  updateCategoryFields();
   refreshStatus();
 })();

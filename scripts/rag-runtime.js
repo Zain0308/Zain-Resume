@@ -565,6 +565,11 @@ function manualKnowledgePayload(body, existingKey) {
   const content = knowledgeContent(body?.content, 8000);
   const stack = [...new Set(String(body?.stack || '').split(/[,\n]+/).map((item) => knowledgeText(item, 60)).filter(Boolean))].slice(0, 20);
   const mediaUrl = knowledgeMediaUrl(body?.mediaUrl);
+  const institution = knowledgeText(body?.institution, 160);
+  const startDate = knowledgeText(body?.startDate, 32);
+  const endDate = knowledgeText(body?.endDate, 32);
+  const contactValue = knowledgeText(body?.contactValue, 240);
+  const contactUrl = knowledgeMediaUrl(body?.contactUrl);
   const category = ['project', 'experience', 'skills', 'education', 'contact', 'profile'].includes(body?.category) ? body.category : 'profile';
   if (title.length < 2 || content.length < 20) throw new Error('Add a title and at least 20 characters of professional detail.');
   const chunkKey = existingKey || knowledgeText(body?.chunkKey, 110) || `manual:${crypto.randomUUID()}`;
@@ -578,7 +583,7 @@ function manualKnowledgePayload(body, existingKey) {
     company: knowledgeText(body?.company, 100),
     role: knowledgeText(body?.role, 100),
     project: knowledgeText(body?.project, 100),
-    metadata: { title, source: 'manual', visibility: 'public', stack, mediaUrl }
+    metadata: { title, source: 'manual', visibility: 'public', stack, mediaUrl, institution, startDate, endDate, contactValue, contactUrl }
   };
 }
 
@@ -619,7 +624,12 @@ async function publicPortfolioContent(env) {
         role: knowledgeText(item?.role, 100),
         project: knowledgeText(item?.project, 100),
         stack: Array.isArray(item?.stack) ? item.stack.map((value) => knowledgeText(value, 60)).filter(Boolean).slice(0, 20) : null,
-        mediaUrl: knowledgeMediaUrl(item?.mediaUrl)
+        mediaUrl: knowledgeMediaUrl(item?.mediaUrl),
+        institution: knowledgeText(item?.institution, 160),
+        startDate: knowledgeText(item?.startDate, 32),
+        endDate: knowledgeText(item?.endDate, 32),
+        contactValue: knowledgeText(item?.contactValue, 240),
+        contactUrl: knowledgeMediaUrl(item?.contactUrl)
       }))
       .filter((item) => item.content.length >= 2);
     return knowledgeJson({ items });
