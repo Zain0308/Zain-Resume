@@ -27,6 +27,16 @@ function knowledgeContent(value, maximum = 8000) {
     .slice(0, maximum);
 }
 
+function knowledgeMediaUrl(value) {
+  const candidate = knowledgeText(value, 1000);
+  if (!candidate) return '';
+  if (candidate.startsWith('/')) return candidate;
+  try {
+    const parsed = new URL(candidate);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? parsed.toString() : '';
+  } catch { return ''; }
+}
+
 function knowledgeAdminToken(env) {
   return String(env.KNOWLEDGE_ADMIN_TOKEN || '');
 }
@@ -554,6 +564,7 @@ function manualKnowledgePayload(body, existingKey) {
   const title = knowledgeText(body?.title, 100);
   const content = knowledgeContent(body?.content, 8000);
   const stack = [...new Set(String(body?.stack || '').split(/[,\n]+/).map((item) => knowledgeText(item, 60)).filter(Boolean))].slice(0, 20);
+  const mediaUrl = knowledgeMediaUrl(body?.mediaUrl);
   const category = ['project', 'experience', 'skills', 'education', 'contact', 'profile'].includes(body?.category) ? body.category : 'profile';
   if (title.length < 2 || content.length < 20) throw new Error('Add a title and at least 20 characters of professional detail.');
   const chunkKey = existingKey || knowledgeText(body?.chunkKey, 110) || `manual:${crypto.randomUUID()}`;
@@ -567,7 +578,7 @@ function manualKnowledgePayload(body, existingKey) {
     company: knowledgeText(body?.company, 100),
     role: knowledgeText(body?.role, 100),
     project: knowledgeText(body?.project, 100),
-    metadata: { title, source: 'manual', visibility: 'public', stack }
+    metadata: { title, source: 'manual', visibility: 'public', stack, mediaUrl }
   };
 }
 
@@ -607,7 +618,8 @@ async function publicPortfolioContent(env) {
         company: knowledgeText(item?.company, 100),
         role: knowledgeText(item?.role, 100),
         project: knowledgeText(item?.project, 100),
-        stack: Array.isArray(item?.stack) ? item.stack.map((value) => knowledgeText(value, 60)).filter(Boolean).slice(0, 20) : null
+        stack: Array.isArray(item?.stack) ? item.stack.map((value) => knowledgeText(value, 60)).filter(Boolean).slice(0, 20) : null,
+        mediaUrl: knowledgeMediaUrl(item?.mediaUrl)
       }))
       .filter((item) => item.content.length >= 2);
     return knowledgeJson({ items });

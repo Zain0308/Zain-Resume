@@ -438,6 +438,7 @@
       title,
       content: String(item.content || '').replace(new RegExp('^' + escapedTitle + '\\.\\s*', 'i'), ''),
       meta: [item.company, item.role, item.project].filter(Boolean).map(String).slice(0, 5),
+      mediaUrl: String(item.mediaUrl || ''),
       tags: []
     };
   };
@@ -493,6 +494,16 @@
     return combined.filter((label) => !combined.some((other) => other !== label && other.toLowerCase().includes(label.toLowerCase()))).slice(0, 8);
   };
 
+  const safeMediaUrl = (value) => {
+    const candidate = String(value || '').trim();
+    if (!candidate) return '';
+    try {
+      const parsed = new URL(candidate, window.location.origin);
+      if (parsed.protocol === 'http:' || parsed.protocol === 'https:') return parsed.href;
+    } catch { /* Ignore invalid media URLs. */ }
+    return '';
+  };
+
   const appendProject = (item, details) => {
     const projectGrid = document.querySelector('.project-grid');
     if (!projectGrid) return false;
@@ -503,7 +514,20 @@
     const tags = node('ul', 'tag-list');
     details.tags.slice(0, 8).forEach((tag) => tags.append(node('li', '', tag)));
     body.append(tags);
-    card.append(number, body);
+    const mediaUrl = safeMediaUrl(details.mediaUrl);
+    if (mediaUrl) {
+      const visual = node('div', 'project-visual dynamic-project-media');
+      const image = document.createElement('img');
+      image.src = mediaUrl;
+      image.alt = `${details.title} preview`;
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      image.addEventListener('error', () => visual.remove(), { once: true });
+      visual.append(image);
+      card.append(number, visual, body);
+    } else {
+      card.append(number, body);
+    }
     projectGrid.append(card);
     return true;
   };

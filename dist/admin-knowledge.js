@@ -15,8 +15,13 @@
     stackField.className = 'field full';
     stackField.innerHTML = '<label for="manualStack">Technology stack</label><input id="manualStack" maxlength="500" placeholder="ASP.NET Core, Angular, SQL Server" /><small style="display:block;margin-top:6px;color:#71829a;font-size:11px">Comma-separated technologies used in this project. Only these values become portfolio chips.</small>';
     contentField.before(stackField);
+    const mediaField = document.createElement('div');
+    mediaField.className = 'field full';
+    mediaField.innerHTML = '<label for="manualMediaUrl">Card image / GIF URL (optional)</label><input id="manualMediaUrl" maxlength="1000" type="url" placeholder="https://example.com/project-preview.gif" /><small style="display:block;margin-top:6px;color:#71829a;font-size:11px">Paste a direct image or GIF URL. It will appear at the top of this project card.</small>';
+    stackField.after(mediaField);
   }
   const manualStack = $('#manualStack');
+  const manualMediaUrl = $('#manualMediaUrl');
   let selectedFile = null;
   let manualItems = [];
   let pendingDelete = null;
@@ -146,6 +151,7 @@
     manualForm.reset();
     manualKey.value = '';
     manualStack.value = '';
+    manualMediaUrl.value = '';
     $('#manualTitleInput').value = '';
     $('#cancelEdit').hidden = true;
     $('#saveManual').textContent = 'Save knowledge';
@@ -179,6 +185,7 @@
         $('#manualRole').value = item.role || '';
         $('#manualProject').value = item.project || '';
         manualStack.value = Array.isArray(item.stack) ? item.stack.join(', ') : '';
+        manualMediaUrl.value = item.mediaUrl || '';
         $('#manualContent').value = item.content || '';
         $('#cancelEdit').hidden = false;
         $('#saveManual').textContent = 'Update knowledge';
@@ -247,6 +254,7 @@
       role: $('#manualRole').value.trim(),
       project: $('#manualProject').value.trim(),
       stack: manualStack.value.trim(),
+      mediaUrl: manualMediaUrl.value.trim(),
       content: $('#manualContent').value.trim()
     };
     try {
