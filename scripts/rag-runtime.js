@@ -581,6 +581,30 @@ async function deleteManualKnowledge(request, env) {
   return knowledgeJson({ ok: true });
 }
 
+async function publicPortfolioContent(env) {
+  const hasStorage = Boolean(env.SUPABASE_URL && (env.SUPABASE_PUBLISHABLE_KEY || env.SUPABASE_ANON_KEY) && env.KNOWLEDGE_ADMIN_TOKEN);
+  if (!hasStorage) return knowledgeJson({ items: [] });
+  try {
+    const index = await supabaseKnowledgeRpc('portfolio_knowledge_status', { p_admin_token: knowledgeAdminToken(env) }, env);
+    const items = (Array.isArray(index?.manualDocuments) ? index.manualDocuments : [])
+      .slice(0, 50)
+      .map((item) => ({
+        id: String(item?.id || ''),
+        title: knowledgeText(item?.title || item?.project || item?.company || 'Portfolio update', 100),
+        content: knowledgeText(item?.content, 1800),
+        category: ['project', 'experience', 'skills', 'education', 'contact', 'profile'].includes(item?.category) ? item.category : 'profile',
+        company: knowledgeText(item?.company, 100),
+        role: knowledgeText(item?.role, 100),
+        project: knowledgeText(item?.project, 100)
+      }))
+      .filter((item) => item.content.length >= 2);
+    return knowledgeJson({ items });
+  } catch (error) {
+    console.error('Public portfolio content could not be loaded.', error instanceof Error ? error.message : 'unknown error');
+    return knowledgeJson({ items: [] });
+  }
+}
+
 async function handleKnowledgeRequest(request, env) {
   const url = new URL(request.url);
   const path = url.pathname;
@@ -588,6 +612,10 @@ async function handleKnowledgeRequest(request, env) {
     if (request.method !== 'GET') return knowledgeJson({ error: 'Method not allowed.' }, 405);
     if (!isAdmin(request, env)) return forbiddenPage();
     return new Response(adminKnowledgePage, { headers: securityHeaders({ 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow', 'content-security-policy': "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'" }) });
+  }
+  if (path === '/api/portfolio/content') {
+    if (request.method !== 'GET') return knowledgeJson({ error: 'Method not allowed.' }, 405);
+    return publicPortfolioContent(env);
   }
   if (path === '/api/chat') {
     if (request.method !== 'POST') return knowledgeJson({ error: 'Method not allowed.' }, 405);

@@ -408,3 +408,128 @@
 
   root.classList.add('enhanced');
 })();
+
+(() => {
+  const section = document.querySelector('#live-portfolio');
+  const grid = document.querySelector('#livePortfolioGrid');
+  if (!section || !grid) return;
+
+  const categoryLabels = {
+    project: 'Project update',
+    experience: 'Experience update',
+    skills: 'Skills update',
+    education: 'Education update',
+    contact: 'Contact update',
+    profile: 'Profile update'
+  };
+
+  const node = (tag, className, value) => {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (value) element.textContent = value;
+    return element;
+  };
+
+  const detailsFor = (item) => {
+    const title = String(item.title || item.project || item.company || 'Portfolio update');
+    const escapedTitle = title.replace(/[\^$.*+?()[\]{}|]/g, '\\$&');
+    return {
+      category: String(item.category || 'profile'),
+      title,
+      content: String(item.content || '').replace(new RegExp('^' + escapedTitle + '\\.\\s*', 'i'), ''),
+      tags: [item.company, item.role, item.project].filter(Boolean).map(String).slice(0, 5)
+    };
+  };
+
+  const appendProject = (item, details) => {
+    const projectGrid = document.querySelector('.project-grid');
+    if (!projectGrid) return false;
+    const card = node('article', 'project-card dynamic-project-card');
+    const number = node('div', 'project-no', 'LIVE / PROJECT');
+    const body = node('div', 'project-body');
+    body.append(node('p', 'project-kicker', details.tags[0] || 'Portfolio update'), node('h3', '', details.title), node('p', '', details.content));
+    const tags = node('ul', 'tag-list');
+    [details.category, ...details.tags].slice(0, 5).forEach((tag) => tags.append(node('li', '', tag)));
+    body.append(tags);
+    card.append(number, body);
+    projectGrid.append(card);
+    return true;
+  };
+
+  const appendExperience = (item, details) => {
+    const timeline = document.querySelector('.timeline');
+    if (!timeline) return false;
+    const entry = node('article', 'timeline-item dynamic-timeline-item');
+    const date = node('div', 'timeline-date', 'Recently added');
+    const marker = node('div', 'timeline-marker');
+    marker.append(node('span'));
+    const copy = node('div', 'timeline-copy');
+    copy.append(node('p', details.tags[0] || 'Professional experience'), node('h3', '', details.title), node('span', '', details.content));
+    const tags = node('div', 'timeline-tags');
+    [details.category, ...details.tags].slice(0, 6).forEach((tag) => tags.append(node('i', '', tag)));
+    copy.append(tags);
+    entry.append(date, marker, copy, node('b', 'LIVE'));
+    timeline.append(entry);
+    return true;
+  };
+
+  const appendSkill = (item, details) => {
+    const expertiseGrid = document.querySelector('.expertise-grid');
+    if (!expertiseGrid) return false;
+    const card = node('article', 'expertise-card dynamic-expertise-card');
+    card.append(node('span', 'expertise-icon', '{ }'), node('p', 'card-index', 'LIVE'), node('h3', '', details.title), node('p', '', details.content));
+    const cloud = node('div', 'skill-cloud');
+    [details.title, ...details.tags].slice(0, 7).forEach((tag) => cloud.append(node('span', '', tag)));
+    card.append(cloud);
+    expertiseGrid.append(card);
+    return true;
+  };
+
+  const appendEducation = (item, details) => {
+    const education = document.querySelector('.education');
+    if (!education) return false;
+    const copy = node('p');
+    copy.append(node('strong', '', details.title), document.createElement('br'), document.createTextNode(details.content));
+    education.parentElement?.append(node('div', 'education dynamic-education', ''));
+    const entry = education.parentElement?.lastElementChild;
+    if (!entry) return false;
+    entry.append(node('span', '', 'UPDATED'), copy);
+    return true;
+  };
+
+  const render = (items) => {
+    if (!Array.isArray(items) || !items.length) return;
+    const fallback = [];
+    items.forEach((item) => {
+      const details = detailsFor(item);
+      const rendered = details.category === 'project' ? appendProject(item, details)
+        : details.category === 'experience' ? appendExperience(item, details)
+          : details.category === 'skills' ? appendSkill(item, details)
+            : details.category === 'education' ? appendEducation(item, details)
+              : false;
+      if (!rendered) fallback.push({ item, details });
+    });
+    if (!fallback.length) return;
+    const fragment = document.createDocumentFragment();
+    fallback.forEach(({ details }) => {
+      const card = node('article', 'live-portfolio-card');
+      const kicker = node('p', 'live-kicker', categoryLabels[details.category] || 'Portfolio update');
+      const heading = node('h3', '', details.title);
+      const meta = details.tags.length ? node('p', 'live-meta', details.tags.join(' · ')) : null;
+      const body = node('p', 'live-content', details.content || details.title);
+      const tags = node('ul', 'live-tags');
+      [details.category, ...details.tags].slice(0, 3).forEach((tag) => tags.append(node('li', '', tag)));
+      card.append(kicker, heading);
+      if (meta) card.append(meta);
+      card.append(body, tags);
+      fragment.append(card);
+    });
+    grid.replaceChildren(fragment);
+    section.hidden = false;
+  };
+
+  fetch('/api/portfolio/content', { headers: { accept: 'application/json' }, credentials: 'same-origin' })
+    .then((response) => response.ok ? response.json() : null)
+    .then((data) => render(data?.items))
+    .catch(() => {});
+})();
