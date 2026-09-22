@@ -441,6 +441,34 @@
     };
   };
 
+  const parseManualText = (value) => {
+    const tags = [];
+    const lines = String(value || '').split(/\n+/).map((line) => line.trim()).filter(Boolean);
+    const body = [];
+    const inlineBulletPattern = /(?:^|\s)[-*•]\s+(.+?)(?=\s+[-*•]\s+|$)/g;
+    lines.forEach((line) => {
+      if (/^[-*•]\s+/.test(line)) {
+        const tag = line.replace(/^[-*•]\s+/, '').trim();
+        if (tag) tags.push(tag);
+        return;
+      }
+      const matches = [...line.matchAll(inlineBulletPattern)];
+      if (matches.length) {
+        matches.forEach((match) => {
+          const tag = String(match[1] || '').trim();
+          if (tag) tags.push(tag);
+        });
+        body.push(line.replace(inlineBulletPattern, ' ').trim());
+      } else {
+        body.push(line);
+      }
+    });
+    return {
+      body: body.join(' ').replace(/^#{1,6}\s+/g, '').replace(/\*\*(.*?)\*\*/g, '$1').replace(/\x60([^\x60]+)\x60/g, '$1').replace(/\s+/g, ' ').trim(),
+      tags
+    };
+  };
+
   const appendProject = (item, details) => {
     const projectGrid = document.querySelector('.project-grid');
     if (!projectGrid) return false;
@@ -449,7 +477,7 @@
     const body = node('div', 'project-body');
     body.append(node('p', 'project-kicker', details.tags[0] || 'Portfolio update'), node('h3', '', details.title), node('p', '', details.content));
     const tags = node('ul', 'tag-list');
-    [details.category, ...details.tags].slice(0, 5).forEach((tag) => tags.append(node('li', '', tag)));
+    details.tags.slice(0, 8).forEach((tag) => tags.append(node('li', '', tag)));
     body.append(tags);
     card.append(number, body);
     projectGrid.append(card);
@@ -466,7 +494,7 @@
     const copy = node('div', 'timeline-copy');
     copy.append(node('p', details.tags[0] || 'Professional experience'), node('h3', '', details.title), node('span', '', details.content));
     const tags = node('div', 'timeline-tags');
-    [details.category, ...details.tags].slice(0, 6).forEach((tag) => tags.append(node('i', '', tag)));
+    details.tags.slice(0, 8).forEach((tag) => tags.append(node('i', '', tag)));
     copy.append(tags);
     entry.append(date, marker, copy, node('b', 'LIVE'));
     timeline.append(entry);
@@ -479,7 +507,7 @@
     const card = node('article', 'expertise-card dynamic-expertise-card');
     card.append(node('span', 'expertise-icon', '{ }'), node('p', 'card-index', 'LIVE'), node('h3', '', details.title), node('p', '', details.content));
     const cloud = node('div', 'skill-cloud');
-    [details.title, ...details.tags].slice(0, 7).forEach((tag) => cloud.append(node('span', '', tag)));
+    [details.title, ...details.tags].slice(0, 8).forEach((tag) => cloud.append(node('span', '', tag)));
     card.append(cloud);
     expertiseGrid.append(card);
     return true;
@@ -502,6 +530,9 @@
     const fallback = [];
     items.forEach((item) => {
       const details = detailsFor(item);
+      const parsedContent = parseManualText(details.content);
+      details.content = parsedContent.body || details.content;
+      details.tags = [...new Set([...parsedContent.tags, ...details.tags])].slice(0, 8);
       const rendered = details.category === 'project' ? appendProject(item, details)
         : details.category === 'experience' ? appendExperience(item, details)
           : details.category === 'skills' ? appendSkill(item, details)
@@ -518,7 +549,7 @@
       const meta = details.tags.length ? node('p', 'live-meta', details.tags.join(' · ')) : null;
       const body = node('p', 'live-content', details.content || details.title);
       const tags = node('ul', 'live-tags');
-      [details.category, ...details.tags].slice(0, 3).forEach((tag) => tags.append(node('li', '', tag)));
+      details.tags.slice(0, 6).forEach((tag) => tags.append(node('li', '', tag)));
       card.append(kicker, heading);
       if (meta) card.append(meta);
       card.append(body, tags);

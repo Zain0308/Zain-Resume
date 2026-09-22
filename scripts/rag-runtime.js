@@ -17,6 +17,16 @@ function knowledgeText(value, maximum = 1200) {
   return String(value || '').normalize('NFKC').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, maximum);
 }
 
+function knowledgeContent(value, maximum = 8000) {
+  return String(value || '').normalize('NFKC')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, ' ')
+    .replace(/\r\n?/g, '\n')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+    .slice(0, maximum);
+}
+
 function knowledgeAdminToken(env) {
   return String(env.KNOWLEDGE_ADMIN_TOKEN || '');
 }
@@ -542,7 +552,7 @@ async function uploadAndIndexResume(request, env) {
 
 function manualKnowledgePayload(body, existingKey) {
   const title = knowledgeText(body?.title, 100);
-  const content = knowledgeText(body?.content, 8000);
+  const content = knowledgeContent(body?.content, 8000);
   const category = ['project', 'experience', 'skills', 'education', 'contact', 'profile'].includes(body?.category) ? body.category : 'profile';
   if (title.length < 2 || content.length < 20) throw new Error('Add a title and at least 20 characters of professional detail.');
   const chunkKey = existingKey || knowledgeText(body?.chunkKey, 110) || `manual:${crypto.randomUUID()}`;
@@ -591,7 +601,7 @@ async function publicPortfolioContent(env) {
       .map((item) => ({
         id: String(item?.id || ''),
         title: knowledgeText(item?.title || item?.project || item?.company || 'Portfolio update', 100),
-        content: knowledgeText(item?.content, 1800),
+        content: knowledgeContent(item?.content, 1800),
         category: ['project', 'experience', 'skills', 'education', 'contact', 'profile'].includes(item?.category) ? item.category : 'profile',
         company: knowledgeText(item?.company, 100),
         role: knowledgeText(item?.role, 100),
