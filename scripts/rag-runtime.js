@@ -607,7 +607,7 @@ async function publicPortfolioContent(env) {
         company: knowledgeText(item?.company, 100),
         role: knowledgeText(item?.role, 100),
         project: knowledgeText(item?.project, 100),
-        stack: Array.isArray(item?.stack) ? item.stack.map((value) => knowledgeText(value, 60)).filter(Boolean).slice(0, 20) : []
+        stack: Array.isArray(item?.stack) ? item.stack.map((value) => knowledgeText(value, 60)).filter(Boolean).slice(0, 20) : null
       }))
       .filter((item) => item.content.length >= 2);
     return knowledgeJson({ items });
