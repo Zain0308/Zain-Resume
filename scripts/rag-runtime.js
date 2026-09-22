@@ -553,6 +553,7 @@ async function uploadAndIndexResume(request, env) {
 function manualKnowledgePayload(body, existingKey) {
   const title = knowledgeText(body?.title, 100);
   const content = knowledgeContent(body?.content, 8000);
+  const stack = [...new Set(String(body?.stack || '').split(/[,\n]+/).map((item) => knowledgeText(item, 60)).filter(Boolean))].slice(0, 20);
   const category = ['project', 'experience', 'skills', 'education', 'contact', 'profile'].includes(body?.category) ? body.category : 'profile';
   if (title.length < 2 || content.length < 20) throw new Error('Add a title and at least 20 characters of professional detail.');
   const chunkKey = existingKey || knowledgeText(body?.chunkKey, 110) || `manual:${crypto.randomUUID()}`;
@@ -566,7 +567,7 @@ function manualKnowledgePayload(body, existingKey) {
     company: knowledgeText(body?.company, 100),
     role: knowledgeText(body?.role, 100),
     project: knowledgeText(body?.project, 100),
-    metadata: { title, source: 'manual', visibility: 'public' }
+    metadata: { title, source: 'manual', visibility: 'public', stack }
   };
 }
 
@@ -605,7 +606,8 @@ async function publicPortfolioContent(env) {
         category: ['project', 'experience', 'skills', 'education', 'contact', 'profile'].includes(item?.category) ? item.category : 'profile',
         company: knowledgeText(item?.company, 100),
         role: knowledgeText(item?.role, 100),
-        project: knowledgeText(item?.project, 100)
+        project: knowledgeText(item?.project, 100),
+        stack: Array.isArray(item?.stack) ? item.stack.map((value) => knowledgeText(value, 60)).filter(Boolean).slice(0, 20) : []
       }))
       .filter((item) => item.content.length >= 2);
     return knowledgeJson({ items });

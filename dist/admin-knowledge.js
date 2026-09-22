@@ -9,6 +9,14 @@
   const manualList = $('#manualList');
   const deleteDialog = $('#deleteConfirm');
   const confirmDeleteButton = $('#confirmDelete');
+  const contentField = $('#manualContent')?.closest('.field');
+  if (contentField) {
+    const stackField = document.createElement('div');
+    stackField.className = 'field full';
+    stackField.innerHTML = '<label for="manualStack">Technology stack</label><input id="manualStack" maxlength="500" placeholder="ASP.NET Core, Angular, SQL Server" /><small style="display:block;margin-top:6px;color:#71829a;font-size:11px">Comma-separated technologies used in this project. Only these values become portfolio chips.</small>';
+    contentField.before(stackField);
+  }
+  const manualStack = $('#manualStack');
   let selectedFile = null;
   let manualItems = [];
   let pendingDelete = null;
@@ -137,6 +145,7 @@
   function resetManualForm() {
     manualForm.reset();
     manualKey.value = '';
+    manualStack.value = '';
     $('#manualTitleInput').value = '';
     $('#cancelEdit').hidden = true;
     $('#saveManual').textContent = 'Save knowledge';
@@ -169,6 +178,7 @@
         $('#manualCompany').value = item.company || '';
         $('#manualRole').value = item.role || '';
         $('#manualProject').value = item.project || '';
+        manualStack.value = Array.isArray(item.stack) ? item.stack.join(', ') : '';
         $('#manualContent').value = item.content || '';
         $('#cancelEdit').hidden = false;
         $('#saveManual').textContent = 'Update knowledge';
@@ -236,6 +246,7 @@
       company: $('#manualCompany').value.trim(),
       role: $('#manualRole').value.trim(),
       project: $('#manualProject').value.trim(),
+      stack: manualStack.value.trim(),
       content: $('#manualContent').value.trim()
     };
     try {

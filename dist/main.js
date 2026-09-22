@@ -556,7 +556,9 @@
       const details = detailsFor(item);
       const parsedContent = parseManualText(details.content);
       details.content = parsedContent.body || details.content;
-      details.tags = technologyTags(details.title + ' ' + details.content, parsedContent.tags);
+      details.tags = Array.isArray(item.stack)
+        ? [...new Set(item.stack.map((value) => String(value).trim()).filter(Boolean))].slice(0, 8)
+        : technologyTags(details.title + ' ' + details.content, parsedContent.tags);
       const rendered = details.category === 'project' ? appendProject(item, details)
         : details.category === 'experience' ? appendExperience(item, details)
           : details.category === 'skills' ? appendSkill(item, details)
