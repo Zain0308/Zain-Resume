@@ -437,7 +437,8 @@
       category: String(item.category || 'profile'),
       title,
       content: String(item.content || '').replace(new RegExp('^' + escapedTitle + '\\.\\s*', 'i'), ''),
-      tags: [item.company, item.role, item.project].filter(Boolean).map(String).slice(0, 5)
+      meta: [item.company, item.role, item.project].filter(Boolean).map(String).slice(0, 5),
+      tags: []
     };
   };
 
@@ -469,13 +470,36 @@
     };
   };
 
+  const technologyCatalog = [
+    ['ASP.NET Core', /\basp\.?net core\b/i], ['ASP.NET MVC', /\basp\.?net mvc\b/i], ['ASP.NET', /\basp\.?net\b/i],
+    ['.NET Core', /\.net core\b/i], ['.NET', /\.net\b/i], ['C#', /\bc#\b/i], ['Angular', /\bangular\b/i],
+    ['TypeScript', /\btypescript\b/i], ['JavaScript', /\bjavascript\b/i], ['jQuery', /\bjquery\b/i], ['AJAX', /\bajax\b/i],
+    ['HTML', /\bhtml5?\b/i], ['CSS', /\bcss3?\b/i], ['Bootstrap', /\bbootstrap\b/i], ['Node.js', /\bnode(?:\.js|js)\b/i],
+    ['Express.js', /\bexpress(?:\.js|js)\b/i], ['SQL Server', /\bsql server\b/i], ['MongoDB', /\bmongodb\b/i], ['MySQL', /\bmysql\b/i],
+    ['PostgreSQL', /\bpostgres(?:ql)?\b/i], ['Redis', /\bredis\b/i], ['EF Core', /\b(?:entity framework core|ef core)\b/i],
+    ['Dapper', /\bdapper\b/i], ['ADO.NET', /\bado\.?net\b/i], ['REST APIs', /\brest(?:ful)? api(?:s)?\b/i], ['Web APIs', /\bweb api(?:s)?\b/i],
+    ['SOAP', /\bsoap\b/i], ['SignalR', /\bsignalr\b/i], ['WebSockets', /\bwebsocket(?:s)?\b/i], ['JWT', /\bjwt\b/i],
+    ['Microservices', /\bmicroservices?\b/i], ['Docker', /\bdocker\b/i], ['Kubernetes', /\bkubernetes\b/i], ['Azure', /\bazure\b/i],
+    ['Azure OpenAI', /\bazure openai\b/i], ['OpenAI', /\bopenai\b/i], ['GPT', /\bgpt(?:-\d+)?\b/i], ['React', /\breact(?:\.js)?\b/i],
+    ['Flutter', /\bflutter\b/i], ['Python', /\bpython\b/i], ['Java', /\bjava\b/i], ['Git', /\bgit(?:hub|lab)?\b/i],
+    ['Jenkins', /\bjenkins\b/i], ['Swagger', /\bswagger\b/i], ['Postman', /\bpostman\b/i], ['Salesforce', /\bsalesforce\b/i]
+  ];
+
+  const technologyTags = (text, candidates = []) => {
+    const source = String(text || '');
+    const found = technologyCatalog.filter(([, pattern]) => pattern.test(source)).map(([label]) => label);
+    const candidateTech = candidates.filter((candidate) => technologyCatalog.some(([label, pattern]) => pattern.test(candidate) || label.toLowerCase() === candidate.toLowerCase()));
+    const combined = [...new Set([...found, ...candidateTech])];
+    return combined.filter((label) => !combined.some((other) => other !== label && other.toLowerCase().includes(label.toLowerCase()))).slice(0, 8);
+  };
+
   const appendProject = (item, details) => {
     const projectGrid = document.querySelector('.project-grid');
     if (!projectGrid) return false;
     const card = node('article', 'project-card dynamic-project-card');
     const number = node('div', 'project-no', 'LIVE / PROJECT');
     const body = node('div', 'project-body');
-    body.append(node('p', 'project-kicker', details.tags[0] || 'Portfolio update'), node('h3', '', details.title), node('p', '', details.content));
+    body.append(node('p', 'project-kicker', details.meta[0] || 'Portfolio update'), node('h3', '', details.title), node('p', '', details.content));
     const tags = node('ul', 'tag-list');
     details.tags.slice(0, 8).forEach((tag) => tags.append(node('li', '', tag)));
     body.append(tags);
@@ -492,7 +516,7 @@
     const marker = node('div', 'timeline-marker');
     marker.append(node('span'));
     const copy = node('div', 'timeline-copy');
-    copy.append(node('p', details.tags[0] || 'Professional experience'), node('h3', '', details.title), node('span', '', details.content));
+    copy.append(node('p', details.meta[0] || 'Professional experience'), node('h3', '', details.title), node('span', '', details.content));
     const tags = node('div', 'timeline-tags');
     details.tags.slice(0, 8).forEach((tag) => tags.append(node('i', '', tag)));
     copy.append(tags);
@@ -532,7 +556,7 @@
       const details = detailsFor(item);
       const parsedContent = parseManualText(details.content);
       details.content = parsedContent.body || details.content;
-      details.tags = [...new Set([...parsedContent.tags, ...details.tags])].slice(0, 8);
+      details.tags = technologyTags(details.title + ' ' + details.content, parsedContent.tags);
       const rendered = details.category === 'project' ? appendProject(item, details)
         : details.category === 'experience' ? appendExperience(item, details)
           : details.category === 'skills' ? appendSkill(item, details)
@@ -546,7 +570,7 @@
       const card = node('article', 'live-portfolio-card');
       const kicker = node('p', 'live-kicker', categoryLabels[details.category] || 'Portfolio update');
       const heading = node('h3', '', details.title);
-      const meta = details.tags.length ? node('p', 'live-meta', details.tags.join(' · ')) : null;
+      const meta = details.meta.length ? node('p', 'live-meta', details.meta.join(' · ')) : null;
       const body = node('p', 'live-content', details.content || details.title);
       const tags = node('ul', 'live-tags');
       details.tags.slice(0, 6).forEach((tag) => tags.append(node('li', '', tag)));
