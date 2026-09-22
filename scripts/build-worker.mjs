@@ -151,7 +151,8 @@ export default {
 
     const asset = assets[path];
     if (asset && request.method === 'GET') {
-      return new Response(asset.body, { headers: securityHeaders({ 'content-type': asset.type, 'cache-control': path === '/' || path === '/index.html' ? 'no-cache' : 'public, max-age=3600' }) });
+      const isAppAsset = /\.(?:js|css)$/.test(path);
+      return new Response(asset.body, { headers: securityHeaders({ 'content-type': asset.type, 'cache-control': path === '/' || path === '/index.html' || isAppAsset ? 'no-cache' : 'public, max-age=3600' }) });
     }
     return new Response('Not found', { status: 404, headers: securityHeaders({ 'content-type': 'text/plain; charset=utf-8' }) });
   }
