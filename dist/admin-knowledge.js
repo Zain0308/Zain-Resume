@@ -51,7 +51,10 @@
   };
   const setFieldVisible = (id, visible) => {
     const field = document.querySelector(`#${id}`)?.closest('.field');
-    if (field) field.hidden = !visible;
+    if (field) {
+      field.hidden = !visible;
+      field.style.display = visible ? '' : 'none';
+    }
   };
   const updateCategoryFields = () => {
     const category = manualCategory?.value || 'profile';
