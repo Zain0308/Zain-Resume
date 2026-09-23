@@ -137,6 +137,17 @@ export default {
       return resumeResponse(request, env);
     }
 
+    if (path.startsWith('/portfolio-media/') && (request.method === 'GET' || request.method === 'HEAD')) {
+      const key = path.slice('/portfolio-media/'.length);
+      if (!key || key.includes('..') || !key.startsWith('portfolio/media/')) return new Response('Not found', { status: 404 });
+      let object = null;
+      try { object = env.BUCKET ? await env.BUCKET.get(key) : null; } catch { object = null; }
+      if (!object) return new Response('Not found', { status: 404 });
+      const headers = securityHeaders({ 'content-type': object.httpMetadata?.contentType || 'application/octet-stream', 'cache-control': 'public, max-age=31536000, immutable' });
+      if (request.method === 'HEAD') return new Response(null, { headers });
+      return new Response(object.body, { headers });
+    }
+
     if (path === '/manage-cv' && request.method === 'GET') {
       if (!isAdmin(request, env)) return forbiddenPage();
       return Response.redirect(new URL('/admin/knowledge', request.url), 302);

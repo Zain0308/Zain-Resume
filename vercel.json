@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/index.js", "use": "@vercel/node" },
+    { "src": "dist/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "^/(admin(?:/.*)?)$", "dest": "/api/index.js?__path=/$1" },
+    { "src": "^/(manage-cv)$", "dest": "/api/index.js?__path=/$1" },
+    { "src": "^/(api(?:/.*)?)$", "dest": "/api/index.js?__path=/$1" },
+    { "src": "^/(ZainResume\\.pdf)$", "dest": "/api/index.js?__path=/$1" },
+    { "src": "^/(portfolio-media(?:/.*)?)$", "dest": "/api/index.js?__path=/$1" },
+    { "src": "^/$", "dest": "/dist/index.html" },
+    { "src": "^/(.*)$", "dest": "/dist/$1" }
+  ]
+}

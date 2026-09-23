@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#050813" />
-    <meta
+    <meta data-content-key="site:meta-description" data-content-attribute="content"
       name="description"
       content="Zain Ali is a Full Stack .NET Developer building secure fintech, real-time, AI-powered, and enterprise web applications."
     />
-    <meta name="keywords" content="Zain Ali, ASP.NET Core Developer, .NET Developer, C# Developer, Full Stack Developer, Angular Developer, Software Engineer, REST API Developer, FinTech Developer, Backend Developer" />
-    <title>Zain Ali — Full Stack .NET Developer</title>
+    <meta name="keywords" content="Zain Ali, ASP.NET Core Developer, .NET Developer, C# Developer, Full Stack Developer, Angular Developer, Software Engineer, REST API Developer, FinTech Developer, Backend Developer" data-content-key="site:meta-keywords" data-content-attribute="content" />
+    <title data-content-key="site:meta-title">Zain Ali — Full Stack .NET Developer</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23050a14'/%3E%3Cpath d='M14 20h22L18 44h30' fill='none' stroke='%2363e4ff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="stylesheet" href="./styles.css?v=15" />
@@ -21,7 +21,7 @@
     <div class="boot-loader" id="bootLoader" role="status" aria-live="polite" aria-label="Initializing portfolio">
       <div class="boot-shell">
         <div class="boot-logo">ZA<span>_</span></div>
-        <div class="boot-lines" id="bootLines">
+        <div class="boot-lines" id="bootLines" data-content-key="site:boot-lines" data-content-mode="list">
           <p>Initializing portfolio...</p>
           <p>Loading .NET Runtime...</p>
           <p>Connecting SQL Server...</p>
@@ -29,7 +29,7 @@
           <p>Initializing 3D Workspace...</p>
         </div>
         <div class="boot-progress"><span></span></div>
-        <strong>SYSTEM READY</strong>
+        <strong data-content-key="site:boot-ready">SYSTEM READY</strong>
       </div>
     </div>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -41,7 +41,7 @@
     <header class="site-header">
       <a class="brand" href="#home" aria-label="Zain Ali — home">
         <span class="brand-mark">ZA</span>
-        <span class="brand-copy">Zain Ali<small>Full Stack Engineer</small></span>
+        <span class="brand-copy" data-content-key="profile:name">Zain Ali<small data-content-key="profile:role">Full Stack .NET Developer</small></span>
       </a>
 
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNav">
@@ -50,45 +50,45 @@
       </button>
 
       <nav class="primary-nav" id="primaryNav" aria-label="Primary navigation">
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#experience">Experience</a>
-        <a href="#expertise">Skills</a>
-        <a href="#work">Projects</a>
-        <a href="#terminal">Terminal</a>
-        <a class="nav-cta" href="#contact">Contact <span aria-hidden="true">↗</span></a>
+        <a href="#home" data-content-key="site:nav:home">Home</a>
+        <a href="#about" data-content-key="site:nav:about">About</a>
+        <a href="#experience" data-content-key="site:nav:experience">Experience</a>
+        <a href="#expertise" data-content-key="site:nav:skills">Skills</a>
+        <a href="#work" data-content-key="site:nav:projects">Projects</a>
+        <a href="#terminal" data-content-key="site:nav:terminal">Terminal</a>
+        <a class="nav-cta" href="#contact" data-content-key="site:nav:contact">Contact <span aria-hidden="true">↗</span></a>
       </nav>
     </header>
 
     <main id="main">
       <section class="hero section-shell" id="home" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow reveal"><span></span> Software Engineer · Karachi, Pakistan</p>
+          <p class="eyebrow reveal" data-content-key="site:hero-eyebrow"><span></span> Software Engineer · Karachi, Pakistan</p>
           <h1 id="hero-title" class="hero-title">
-            <span class="title-line"><span>ZAIN ALI</span></span>
-            <span class="title-line accent-line hero-role"><span>Full Stack .NET</span></span>
-            <span class="title-line hero-role"><span>Developer</span></span>
+            <span class="title-line"><span data-content-key="profile:name">ZAIN ALI</span></span>
+            <span class="title-line accent-line hero-role"><span data-content-key="profile:role">Full Stack .NET</span></span>
+            <span class="title-line hero-role"><span data-content-key="profile:role">Developer</span></span>
           </h1>
-          <p class="hero-experience reveal">5 Years of Software Development Experience</p>
-          <p class="hero-intro reveal">
+          <p class="hero-experience reveal" data-content-key="site:hero-experience">5 Years of Software Development Experience</p>
+          <p class="hero-intro reveal" data-content-key="profile:intro">
             Full Stack .NET Software Engineer specializing in ASP.NET Core, C#, Angular, SQL Server, MongoDB,
             enterprise applications, FinTech systems, scalable REST APIs, payment integrations and AI-powered solutions.
           </p>
 
           <div class="typing-terminal reveal" aria-live="polite">
-            <span>&gt;</span> <strong id="typedRole">Building scalable REST APIs...</strong><i></i>
+            <span>&gt;</span> <strong id="typedRole" data-content-key="site:hero-typing-lines">Building scalable REST APIs...</strong><i></i>
           </div>
 
           <div class="hero-actions reveal">
-            <a class="button button-primary magnetic" href="#about">Explore my work <span>↓</span></a>
-            <a class="button button-ghost magnetic" href="#work">View projects <span>↗</span></a>
-            <a class="button button-ghost magnetic" href="/ZainResume.pdf" download="Zain-Ali-Resume.pdf">Download résumé <span>↗</span></a>
-            <a class="button button-ghost magnetic" href="#contact">Contact me <span>↗</span></a>
+            <a class="button button-primary magnetic" href="#about" data-content-key="site:hero-button-explore">Explore my work <span>↓</span></a>
+            <a class="button button-ghost magnetic" href="#work" data-content-key="site:hero-button-projects">View projects <span>↗</span></a>
+            <a class="button button-ghost magnetic" href="/ZainResume.pdf" download="Zain-Ali-Resume.pdf" data-content-key="site:hero-button-resume">Download résumé <span>↗</span></a>
+            <a class="button button-ghost magnetic" href="#contact" data-content-key="site:hero-button-contact">Contact me <span>↗</span></a>
           </div>
 
-          <div class="system-status reveal"><code>&gt; system.status</code><span><i></i> Software Engineer • Full Stack Developer</span></div>
+          <div class="system-status reveal"><code>&gt; system.status</code><span data-content-key="site:system-status"><i></i> Software Engineer • Full Stack Developer</span></div>
 
-          <div class="hero-stack reveal" aria-label="Core technology stack">
+          <div class="hero-stack reveal" aria-label="Core technology stack" data-content-key="site:hero-stack" data-content-mode="list">
             <span>.NET Core</span><span>C#</span><span>Angular</span><span>Node.js</span><span>SQL</span><span>Azure AI</span>
           </div>
         </div>
@@ -96,8 +96,8 @@
         <div class="hero-stage reveal" id="heroStage">
           <div class="scene-frame" id="heroVisual">
             <div class="scene-chrome" aria-hidden="true">
-              <span>DEV_WORKSPACE.OS</span>
-              <span class="scene-status"><i></i> SYSTEM ONLINE</span>
+              <span data-content-key="site:scene-workspace">DEV_WORKSPACE.OS</span>
+              <span class="scene-status" data-content-key="site:scene-status"><i></i> SYSTEM ONLINE</span>
             </div>
             <canvas id="hero3d" aria-label="Interactive three-dimensional developer workspace"></canvas>
             <div class="webgl-fallback" id="webglFallback" aria-hidden="true">
@@ -115,21 +115,21 @@
               </div>
               <div class="fallback-orbit"><span>&lt;/&gt;</span></div>
             </div>
-            <div class="scene-label label-api" aria-hidden="true"><span></span> API GATEWAY</div>
-            <div class="scene-label label-data" aria-hidden="true"><span></span> LIVE DATA</div>
+            <div class="scene-label label-api" aria-hidden="true" data-content-key="site:scene-api"><span></span> API GATEWAY</div>
+            <div class="scene-label label-data" aria-hidden="true" data-content-key="site:scene-data"><span></span> LIVE DATA</div>
             <button class="scene-easter easter-db" type="button" data-easter="SQL Server connection established." aria-label="Inspect database">DB</button>
             <button class="scene-easter easter-server" type="button" data-easter="API Status: 200 OK" aria-label="Inspect server">API</button>
             <button class="scene-easter easter-dotnet" type="button" data-easter=".NET Runtime: Ready" aria-label="Inspect .NET runtime">.NET</button>
-            <p class="scene-hint"><span aria-hidden="true">↗</span> Move to explore</p>
+            <p class="scene-hint" data-content-key="site:scene-hint"><span aria-hidden="true">↗</span> Move to explore</p>
           </div>
         </div>
       </section>
 
       <section class="metrics section-shell reveal" aria-label="Career highlights">
-        <article><strong>5</strong><span>Years building<br />production systems</span></article>
-        <article><strong>4</strong><span>Companies across<br />software &amp; fintech</span></article>
-        <article><strong>6</strong><span>Featured products<br />and platforms</span></article>
-        <article><strong>3</strong><span>Core domains:<br />FinTech, AI &amp; APIs</span></article>
+        <article data-content-key="site:metric:years"><strong>5</strong><span>Years building<br />production systems</span></article>
+        <article data-content-key="site:metric:companies"><strong>4</strong><span>Companies across<br />software &amp; fintech</span></article>
+        <article data-content-key="site:metric:products"><strong>6</strong><span>Featured products<br />and platforms</span></article>
+        <article data-content-key="site:metric:domains"><strong>3</strong><span>Core domains:<br />FinTech, AI &amp; APIs</span></article>
       </section>
 
       <section class="about-section section-block" id="about" aria-labelledby="about-title">
@@ -146,16 +146,16 @@
             <i class="architecture-path path-four"><b></b></i>
           </div>
           <div class="about-copy reveal">
-            <p class="eyebrow"><span></span> About me</p>
-            <h2 id="about-title">I engineer complete systems, <em>not isolated features.</em></h2>
-            <p>Zain Ali is a Full Stack .NET Software Engineer with 5 years of experience developing enterprise and FinTech applications.</p>
-            <p>My work connects ASP.NET Core, C#, Angular, SQL Server, MongoDB, banking and payment APIs, production support, performance optimization, and AI-powered applications.</p>
-            <div class="principles">
+            <p class="eyebrow" data-content-key="site:about-eyebrow"><span></span> About me</p>
+            <h2 id="about-title" data-content-key="site:about-heading">I engineer complete systems, <em>not isolated features.</em></h2>
+            <p data-content-key="site:about-summary">Zain Ali is a Full Stack .NET Software Engineer with 5 years of experience developing enterprise and FinTech applications.</p>
+            <p data-content-key="site:about-details">My work connects ASP.NET Core, C#, Angular, SQL Server, MongoDB, banking and payment APIs, production support, performance optimization, and AI-powered applications.</p>
+            <div class="principles" data-content-key="site:about-principles" data-content-mode="list">
               <span><b>01</b> Backend engineering &amp; REST APIs</span>
               <span><b>02</b> FinTech &amp; payment integrations</span>
               <span><b>03</b> AI-enabled enterprise workflows</span>
             </div>
-            <div class="education"><span>2018 — 2022</span><p><strong>BS Information Technology</strong><br />Sindh Agriculture University · Software Architecture &amp; Project Management</p></div>
+            <div class="education" data-content-key="education:degree"><span>2018 — 2022</span><p><strong>BS Information Technology</strong><br />Sindh Agriculture University · Software Architecture &amp; Project Management</p></div>
           </div>
         </div>
       </section>
@@ -164,10 +164,10 @@
         <div class="section-shell">
           <div class="section-heading reveal">
             <div>
-              <p class="eyebrow"><span></span> Current focus · Juba Express</p>
-              <h2 id="fintech-title">FinTech architecture<br /><em>built for production.</em></h2>
+              <p class="eyebrow" data-content-key="site:fintech-eyebrow"><span></span> Current focus · Juba Express</p>
+              <h2 id="fintech-title" data-content-key="site:fintech-heading">FinTech architecture<br /><em>built for production.</em></h2>
             </div>
-            <p>Full Stack Developer · Feb 2025 — Present. Building enterprise payment and remittance applications across user interfaces, services, integrations, data, and deployments.</p>
+            <p data-content-key="site:fintech-summary">Full Stack Developer · Feb 2025 — Present. Building enterprise payment and remittance applications across user interfaces, services, integrations, data, and deployments.</p>
           </div>
 
           <div class="fintech-grid">
@@ -183,12 +183,12 @@
                 <div class="route-segment"><b>PAID</b><i></i></div>
                 <div class="fin-node"><i>05</i><strong>Banking API</strong><span>Beneficiary</span></div>
               </div>
-              <p class="security-note"><span>◇</span> Conceptual architecture — no customer data or credentials displayed.</p>
+              <p class="security-note" data-content-key="site:fintech-security"><span>◇</span> Conceptual architecture — no customer data or credentials displayed.</p>
             </div>
             <div class="fintech-responsibilities reveal">
-              <p class="project-kicker">FULL-STACK OWNERSHIP</p>
-              <h3>From application screens to post-deployment validation.</h3>
-              <div class="responsibility-list">
+              <p class="project-kicker" data-content-key="site:fintech-ownership-label">FULL-STACK OWNERSHIP</p>
+              <h3 data-content-key="site:fintech-ownership-heading">From application screens to post-deployment validation.</h3>
+              <div class="responsibility-list" data-content-key="site:fintech-responsibilities" data-content-mode="list">
                 <span>Business modules &amp; dashboards</span><span>Reports &amp; application screens</span>
                 <span>Mastercard payment gateway</span><span>Banking API integrations</span>
                 <span>Payment &amp; remittance services</span><span>RESTful APIs</span>
@@ -204,10 +204,10 @@
       <section class="ai-section section-block" id="ai-automation" aria-labelledby="ai-title">
         <div class="section-shell ai-layout">
           <div class="ai-copy reveal">
-            <p class="eyebrow"><span></span> AI &amp; automation</p>
-            <h2 id="ai-title">Intelligence connected to <em>real workflows.</em></h2>
-            <p>I have developed Agentic AI customer-support solutions for chat and voice workflows involving customer queries, authentication, account verification, order information, Salesforce, and business automation.</p>
-            <div class="hero-stack"><span>Azure OpenAI</span><span>GPT-4</span><span>Agentic AI</span><span>Salesforce</span><span>Enterprise APIs</span></div>
+            <p class="eyebrow" data-content-key="site:ai-eyebrow"><span></span> AI &amp; automation</p>
+            <h2 id="ai-title" data-content-key="site:ai-heading">Intelligence connected to <em>real workflows.</em></h2>
+            <p data-content-key="site:ai-body">I have developed Agentic AI customer-support solutions for chat and voice workflows involving customer queries, authentication, account verification, order information, Salesforce, and business automation.</p>
+            <div class="hero-stack" data-content-key="site:ai-stack" data-content-mode="list"><span>Azure OpenAI</span><span>GPT-4</span><span>Agentic AI</span><span>Salesforce</span><span>Enterprise APIs</span></div>
           </div>
           <div class="ai-network reveal" aria-label="AI agent system network">
             <div class="agent-core"><span>AI</span><strong>AGENT</strong></div>
@@ -228,306 +228,5 @@
       <section class="section-shell section-block" id="work" aria-labelledby="work-title">
         <div class="section-heading reveal">
           <div>
-            <p class="eyebrow"><span></span> Featured projects</p>
-            <h2 id="work-title">Systems with depth,<br /><em>purpose and impact.</em></h2>
-          </div>
-          <p>From regulated payment flows to AI support agents, I design the architecture behind dependable digital products.</p>
-        </div>
-
-        <div class="project-grid">
-          <article class="project-card project-featured reveal" data-tilt>
-            <div class="project-no">01 / FINTECH</div>
-            <div class="project-visual payment-visual" aria-hidden="true">
-              <div class="payment-core"><span>JX</span><i></i></div>
-              <div class="flow-line flow-a"><b></b></div>
-              <div class="flow-line flow-b"><b></b></div>
-              <div class="flow-line flow-c"><b></b></div>
-              <span class="mini-node node-bank">BANK</span>
-              <span class="mini-node node-api">API</span>
-              <span class="mini-node node-card">CARD</span>
-            </div>
-            <div class="project-body">
-              <p class="project-kicker">Juba Express · Production platform</p>
-              <h3>Cross-border payments engineered for trust.</h3>
-              <p>Secure remittance workflows integrating Mastercard payment gateways, banking APIs, real-time updates, and resilient backend services.</p>
-              <ul class="tag-list"><li>.NET Core</li><li>Angular</li><li>Banking APIs</li><li>SQL Server</li></ul>
-            </div>
-          </article>
-
-          <article class="project-card reveal" data-tilt>
-            <div class="project-no">04 / AGENTIC AI</div>
-            <div class="project-visual ai-visual" aria-hidden="true">
-              <div class="ai-sphere"><span>AI</span></div>
-              <i class="orbit orbit-one"></i><i class="orbit orbit-two"></i>
-              <span class="signal-dot dot-one"></span><span class="signal-dot dot-two"></span><span class="signal-dot dot-three"></span>
-            </div>
-            <div class="project-body">
-              <p class="project-kicker">Enterprise customer experience</p>
-              <h3>AI agents that turn support data into action.</h3>
-              <p>Customer-support agents connecting chat, voice, authentication, account verification, order information, Salesforce, and workflow automation.</p>
-              <ul class="tag-list"><li>Azure OpenAI</li><li>GPT-4</li><li>Web APIs</li></ul>
-            </div>
-          </article>
-
-          <article class="project-card reveal" data-tilt>
-            <div class="project-no">03 / REAL-TIME</div>
-            <div class="project-visual messenger-visual" aria-hidden="true">
-              <div class="message message-left"><span></span><span></span><span></span></div>
-              <div class="message message-right"><b>&lt;/&gt;</b></div>
-              <div class="pulse-ring"></div>
-            </div>
-            <div class="project-body">
-              <p class="project-kicker">IBEX Messenger</p>
-              <h3>Real-time conversations, secured end to end.</h3>
-              <p>A scalable messaging backend with WebSockets, authentication, live events, and AI-ready service integrations.</p>
-              <ul class="tag-list"><li>Node.js</li><li>WebSockets</li><li>JWT</li><li>MongoDB</li></ul>
-            </div>
-          </article>
-
-          <article class="project-card project-wide reveal" data-tilt>
-            <div class="project-no">02 / ANALYTICS</div>
-            <div class="project-body">
-              <p class="project-kicker">RefleCX.io</p>
-              <h3>Complex CX data, made decision-ready.</h3>
-              <p>Reporting and analytics infrastructure for large-scale data processing, real-time CX insights, complex APIs, aggregation, performance, and scalability.</p>
-              <ul class="tag-list"><li>ASP.NET</li><li>Angular</li><li>Reporting</li><li>Enterprise APIs</li></ul>
-            </div>
-            <div class="chart-visual" aria-hidden="true">
-              <div class="chart-grid"></div>
-              <svg viewBox="0 0 440 150" role="presentation"><path d="M5 132 C50 125 58 70 105 92 S172 122 214 62 S285 20 322 50 S387 78 435 13"/><circle cx="105" cy="92" r="5"/><circle cx="214" cy="62" r="5"/><circle cx="322" cy="50" r="5"/><circle cx="435" cy="13" r="5"/></svg>
-            </div>
-          </article>
-
-          <article class="project-card compact-project reveal" data-tilt>
-            <div class="project-no">05 / BUSINESS SYSTEM</div>
-            <div class="project-visual fougito-visual" aria-hidden="true">
-              <div class="pos-screen"><span>FOUGITO</span><i></i><i></i><i></i><b>POS · ORDERS · ANALYTICS</b></div>
-              <div class="pos-card card-a"></div><div class="pos-card card-b"></div>
-            </div>
-            <div class="project-body">
-              <p class="project-kicker">Fougito</p>
-              <h3>Restaurant &amp; garage management system.</h3>
-              <p>Backend APIs, frontend development, POS integration, order management, real-time analytics, and a launched mobile application.</p>
-              <ul class="tag-list"><li>Web APIs</li><li>POS</li><li>Analytics</li><li>Full Stack</li></ul>
-            </div>
-          </article>
-
-          <article class="project-card compact-project reveal" data-tilt>
-            <div class="project-no">06 / PERSONAL PROJECT</div>
-            <div class="project-visual inventory-visual" aria-hidden="true">
-              <div class="inventory-box box-one"><span>12</span></div><div class="inventory-box box-two"><span>28</span></div><div class="inventory-box box-three"><span>41</span></div>
-              <div class="inventory-scan"></div>
-            </div>
-            <div class="project-body">
-              <p class="project-kicker">Inventory Management System</p>
-              <h3>Stock control with secure role-based access.</h3>
-              <p>Inventory tracking, stock management, reporting, authentication, and role-based access control.</p>
-              <ul class="tag-list"><li>.NET Core</li><li>SQL Server</li><li>Bootstrap</li><li>jQuery</li></ul>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="expertise-section section-block" id="expertise" aria-labelledby="expertise-title">
-        <div class="section-shell">
-          <div class="section-heading reveal">
-            <div>
-              <p class="eyebrow"><span></span> My developer arsenal</p>
-              <h2 id="expertise-title">Across the stack.<br /><em>Strong at the core.</em></h2>
-            </div>
-            <p>I connect clean interfaces to robust APIs, data layers, cloud services, and delivery pipelines.</p>
-          </div>
-
-          <div class="stack-universe reveal" aria-label="Interactive .NET technology universe">
-            <div class="stack-core"><span>.NET</span><small>RUNTIME READY</small></div>
-            <button class="tech-orbit tech-csharp" type="button" data-category="Backend Development">C#</button>
-            <button class="tech-orbit tech-angular" type="button" data-category="Frontend Development">Angular</button>
-            <button class="tech-orbit tech-sql" type="button" data-category="Database Engineering">SQL Server</button>
-            <button class="tech-orbit tech-mongo" type="button" data-category="Database Engineering">MongoDB</button>
-            <button class="tech-orbit tech-api" type="button" data-category="API Architecture">REST API</button>
-            <button class="tech-orbit tech-azure" type="button" data-category="AI &amp; Cloud">Azure AI</button>
-            <p class="stack-category" id="stackCategory">Hover or focus a technology to inspect its category.</p>
-          </div>
-
-          <div class="expertise-grid">
-            <article class="expertise-card reveal" data-tilt>
-              <span class="expertise-icon">{ }</span>
-              <p class="card-index">01</p>
-              <h3>Backend &amp; Architecture</h3>
-              <p>Scalable, secure application foundations designed for maintainability and real-world load.</p>
-              <div class="skill-cloud"><span>ASP.NET Core</span><span>C#</span><span>.NET MVC</span><span>Web API</span><span>EF Core</span><span>Dapper</span><span>ADO.NET</span><span>Microservices</span><span>REST</span><span>SOAP</span><span>SignalR</span><span>Node.js</span><span>Express.js</span></div>
-            </article>
-            <article class="expertise-card reveal" data-tilt>
-              <span class="expertise-icon">⌁</span>
-              <p class="card-index">02</p>
-              <h3>Frontend Engineering</h3>
-              <p>Responsive product experiences where complex workflows remain clear, fast, and usable.</p>
-              <div class="skill-cloud"><span>Angular</span><span>TypeScript</span><span>JavaScript</span><span>jQuery</span><span>AJAX</span><span>Bootstrap</span></div>
-            </article>
-            <article class="expertise-card reveal" data-tilt>
-              <span class="expertise-icon">◎</span>
-              <p class="card-index">03</p>
-              <h3>Data, AI &amp; Integrations</h3>
-              <p>Connecting platforms, payment providers, intelligence, and data with resilient contracts.</p>
-              <div class="skill-cloud"><span>SQL Server</span><span>MongoDB</span><span>MySQL</span><span>Agentic AI</span><span>Azure OpenAI</span><span>AI Automation</span><span>Salesforce</span><span>Payment APIs</span></div>
-            </article>
-          </div>
-
-          <div class="tool-marquee reveal" aria-label="Additional development tools">
-            <div class="marquee-track">
-              <span>GitHub Actions</span><i></i><span>Jenkins</span><i></i><span>Azure</span><i></i><span>IIS</span><i></i><span>Swagger</span><i></i><span>Postman</span><i></i><span>Agile / Scrum</span><i></i><span>Unit Testing</span><i></i><span>Design Patterns</span><i></i>
-              <span aria-hidden="true">GitHub Actions</span><i aria-hidden="true"></i><span aria-hidden="true">Jenkins</span><i aria-hidden="true"></i><span aria-hidden="true">Azure</span><i aria-hidden="true"></i><span aria-hidden="true">IIS</span><i aria-hidden="true"></i><span aria-hidden="true">Swagger</span><i aria-hidden="true"></i><span aria-hidden="true">Postman</span><i aria-hidden="true"></i><span aria-hidden="true">Agile / Scrum</span><i aria-hidden="true"></i><span aria-hidden="true">Unit Testing</span><i aria-hidden="true"></i><span aria-hidden="true">Design Patterns</span><i aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-shell section-block" id="experience" aria-labelledby="experience-title">
-        <div class="section-heading reveal">
-          <div>
-            <p class="eyebrow"><span></span> Experience</p>
-            <h2 id="experience-title">A track record of<br /><em>shipping software.</em></h2>
-          </div>
-          <p>Progressing from hands-on .NET development to full-stack ownership of critical product systems.</p>
-        </div>
-
-        <div class="timeline">
-          <article class="timeline-item reveal current">
-            <div class="timeline-date">Feb 2025 — Present</div>
-            <div class="timeline-marker"><span></span></div>
-            <div class="timeline-copy"><p>Juba Express</p><h3>Full Stack Developer</h3><span>FinTech · payment infrastructure · production systems</span><div class="timeline-tags"><i>ASP.NET Core</i><i>Angular</i><i>Banking APIs</i><i>SQL Optimization</i><i>Deployments</i></div></div>
-            <b>NOW</b>
-          </article>
-          <article class="timeline-item reveal">
-            <div class="timeline-date">Mar 2023 — Jan 2025</div>
-            <div class="timeline-marker"><span></span></div>
-            <div class="timeline-copy"><p>IBEX Global PVT</p><h3>Software Engineer</h3><span>Agentic AI · real-time messaging · CX analytics</span><div class="timeline-tags"><i>ASP.NET Core</i><i>Angular</i><i>MongoDB</i><i>Azure OpenAI</i><i>WebSockets</i><i>Salesforce</i></div></div>
-            <b>1Y 11M</b>
-          </article>
-          <article class="timeline-item reveal">
-            <div class="timeline-date">Jan 2022 — Feb 2023</div>
-            <div class="timeline-marker"><span></span></div>
-            <div class="timeline-copy"><p>Technomites</p><h3>.NET Core Developer</h3><span>Web applications · APIs · business systems</span><div class="timeline-tags"><i>ASP.NET Core MVC</i><i>Angular</i><i>jQuery</i><i>Payment Gateways</i><i>Microservices</i></div></div>
-            <b>1Y 2M</b>
-          </article>
-          <article class="timeline-item reveal">
-            <div class="timeline-date">Jun 2021 — Jan 2022</div>
-            <div class="timeline-marker"><span></span></div>
-            <div class="timeline-copy"><p>BDO Pakistan</p><h3>Junior .NET Developer</h3><span>Web applications · backend development · technical support</span><div class="timeline-tags"><i>ASP.NET MVC</i><i>SQL Server</i><i>AJAX</i><i>jQuery DataTables</i><i>Optimization</i></div></div>
-            <b>8M</b>
-          </article>
-        </div>
-      </section>
-
-      <section class="section-shell section-block live-portfolio-section" id="live-portfolio" aria-labelledby="live-portfolio-title" hidden>
-        <div class="section-heading reveal">
-          <div>
-            <p class="eyebrow"><span></span> Live portfolio data</p>
-            <h2 id="live-portfolio-title">More details,<br /><em>kept current.</em></h2>
-          </div>
-          <p>New public projects, skills, experience and profile updates appear here after they are saved in the owner workspace.</p>
-        </div>
-        <div class="live-portfolio-grid" id="livePortfolioGrid"></div>
-      </section>
-
-      <section class="terminal-section section-block" id="terminal" aria-labelledby="terminal-title">
-        <div class="section-shell">
-          <div class="section-heading reveal">
-            <div>
-              <p class="eyebrow"><span></span> Interactive terminal</p>
-              <h2 id="terminal-title">Explore the profile<br /><em>like a developer.</em></h2>
-            </div>
-            <p>Type a command below. Available commands: help, whoami, about, skills, experience, projects, education, contact and clear.</p>
-          </div>
-          <div class="portfolio-terminal reveal" role="region" aria-label="Interactive portfolio terminal">
-            <div class="terminal-window-bar"><div><i></i><i></i><i></i></div><span>zain@portfolio: ~</span><b>● CONNECTED</b></div>
-            <div class="terminal-output" id="terminalOutput" aria-live="polite">
-              <p><span class="terminal-prompt">zain@portfolio:~$</span> whoami</p>
-              <p>Zain Ali<br />Software Engineer<br />Full Stack .NET Developer</p>
-              <p><span class="terminal-prompt">zain@portfolio:~$</span> experience</p>
-              <p>5 Years</p>
-              <p><span class="terminal-prompt">zain@portfolio:~$</span> status</p>
-              <p class="terminal-success">Building scalable software...</p>
-            </div>
-            <form class="terminal-command" id="terminalForm" autocomplete="off">
-              <label for="terminalInput">zain@portfolio:~$</label>
-              <input id="terminalInput" name="command" type="text" spellcheck="false" placeholder="Type help and press Enter" aria-describedby="terminalHint" />
-              <button type="submit">RUN</button>
-            </form>
-            <p class="terminal-hint" id="terminalHint">Try the easter egg: <code>sudo hire zain</code></p>
-          </div>
-        </div>
-      </section>
-
-      <section class="contact-section section-block" id="contact" aria-labelledby="contact-title">
-        <div class="section-shell contact-grid">
-          <div class="contact-copy reveal">
-            <p class="eyebrow"><span></span> Start a conversation</p>
-            <h2 id="contact-title">Let's build<br /><em>something great.</em></h2>
-            <p>I'm open to meaningful full-stack opportunities, product collaborations, and complex application challenges.</p>
-
-            <div class="contact-links">
-              <a href="mailto:Zain-Alii@outlook.com"><span>Email</span><strong>Zain-Alii@outlook.com</strong><b>↗</b></a>
-              <a href="https://linkedin.com/in/zain-ali-34123216a" target="_blank" rel="noreferrer"><span>LinkedIn</span><strong>/in/zain-ali-34123216a</strong><b>↗</b></a>
-              <a href="https://zain-ali-portfolio.zainsaleem970.chatgpt.site" target="_blank" rel="noreferrer"><span>Portfolio</span><strong>zain-ali-portfolio</strong><b>↗</b></a>
-              <div><span>GitHub</span><strong>Profile link available on request</strong><b>⌁</b></div>
-              <a href="tel:+923083954055"><span>Phone</span><strong>+92 308 395 4055</strong><b>↗</b></a>
-            </div>
-
-            <div class="contact-code-orb" aria-hidden="true"><span>&lt;/&gt;</span><i></i><b></b></div>
-          </div>
-
-          <form class="contact-form reveal" id="contactForm">
-            <div class="form-top"><span>NEW_MESSAGE.JSON</span><i></i></div>
-            <div class="field-row">
-              <label><span>Your name</span><input type="text" name="name" autocomplete="name" placeholder="Jane Smith" required /></label>
-              <label><span>Email address</span><input type="email" name="email" autocomplete="email" placeholder="jane@company.com" required /></label>
-            </div>
-            <label><span>Subject</span><input type="text" name="subject" placeholder="Project or opportunity" required /></label>
-            <label><span>Message</span><textarea name="message" rows="6" placeholder="What are you building?" required></textarea></label>
-            <button class="button button-primary magnetic" type="submit">Send message <span>↗</span></button>
-            <pre class="form-status" id="formStatus" role="status" aria-live="polite">Ready: POST /api/contact</pre>
-          </form>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer section-shell">
-      <a class="brand" href="#home"><span class="brand-mark">ZA</span><span class="brand-copy">Zain Ali<small>Karachi, Pakistan</small></span></a>
-      <p>Designed around the work. Built for the web.</p>
-      <p>© <span id="currentYear"></span> Zain Ali</p>
-    </footer>
-
-    <div class="easter-toast" id="easterToast" role="status" aria-live="polite"></div>
-
-    <div class="ask-ai-root">
-      <section class="ask-ai-panel" id="askAiPanel" role="dialog" aria-modal="false" aria-labelledby="askAiTitle" aria-describedby="askAiSubtitle" hidden>
-        <header class="ask-ai-header">
-          <div class="ask-ai-brand"><span class="ask-ai-orb" aria-hidden="true"><i></i><b></b><em></em></span><span><strong id="askAiTitle">ZAIN AI</strong><small id="askAiSubtitle">Portfolio Knowledge Assistant</small></span></div>
-          <div class="ask-ai-head-actions"><button id="askAiClear" type="button" aria-label="Clear conversation" title="Clear conversation">⌫</button><button id="askAiClose" type="button" aria-label="Close Ask Zain AI">×</button></div>
-          <p class="ask-ai-description"><span class="ask-ai-online"></span> Ask about Zain's experience, skills and projects.</p>
-        </header>
-        <div class="ask-ai-messages" id="askAiMessages" role="log" aria-live="polite" aria-relevant="additions text" tabindex="0"></div>
-        <div class="ask-ai-suggestions" id="askAiSuggestions" aria-label="Suggested questions">
-          <button type="button">Tell me about Zain</button><button type="button">What's his .NET experience?</button><button type="button">Tell me about his FinTech work</button><button type="button">What projects has he worked on?</button><button type="button">What's his AI experience?</button><button type="button">What does he do at Juba Express?</button><button type="button">Tell me about IBEX Messenger</button><button type="button">How can I contact Zain?</button>
-        </div>
-        <form class="ask-ai-form" id="askAiForm">
-          <label class="sr-only" for="askAiInput">Ask a question about Zain</label>
-          <textarea id="askAiInput" name="question" rows="1" maxlength="1200" placeholder="Ask about Zain's work..." required></textarea>
-          <button id="askAiSend" type="submit" aria-label="Send question">↑</button>
-          <span class="ask-ai-limit"><span id="askAiCount">0</span>/1200 · Enter to send</span>
-        </form>
-        <a class="ask-ai-contact" id="askAiContact" href="#contact" hidden>Contact Zain <span>→</span></a>
-        <p class="ask-ai-footnote">Answers are grounded in Zain's public portfolio.</p>
-      </section>
-      <button class="ask-ai-trigger" id="askAiTrigger" type="button" aria-expanded="false" aria-controls="askAiPanel" aria-label="Ask Zain AI">
-        <span class="ask-ai-orb" aria-hidden="true"><i></i><b></b><em></em></span><span>Ask Zain AI</span><span class="ask-ai-trigger-arrow" aria-hidden="true">↗</span>
-      </button>
-    </div>
-
-    <noscript><style>.reveal{opacity:1!important;transform:none!important}.webgl-fallback{display:grid!important}</style></noscript>
-    <script src="./main.js?v=13" defer></script>
-    <script src="./ai.js?v=18" defer></script>
-    <script type="module" src="./scene.js?v=13"></script>
-  </body>
-</html>
+            <p class="eyebrow" data-content-key="site:projects-eyebrow"><span></span> Featured projects</p>
+            <h2 id="work-title" data-content-key="site:projects-heading">Systems with d

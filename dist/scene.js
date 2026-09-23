@@ -4,6 +4,12 @@ const canvas = document.querySelector('#hero3d');
 const frame = document.querySelector('#heroVisual');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isMobile = window.matchMedia('(max-width: 780px)').matches;
+let configuredMotion = window.__portfolioSettings?.motion3d || 'full';
+window.addEventListener('portfolio:settings', (event) => {
+  configuredMotion = event.detail?.motion3d || configuredMotion;
+  if (configuredMotion === 'off') canvas?.closest('.scene-frame')?.classList.add('portfolio-3d-off');
+  else canvas?.closest('.scene-frame')?.classList.remove('portfolio-3d-off');
+});
 
 if (canvas instanceof HTMLCanvasElement && frame) {
   const probe = document.createElement('canvas');
@@ -131,7 +137,7 @@ function initialiseScene() {
     lastFrame = timestamp;
     elapsed += delta;
 
-    if (!prefersReducedMotion) {
+    if (configuredMotion !== 'off' && !prefersReducedMotion) {
       pointer.x += (target.x - pointer.x) * 0.035;
       pointer.y += (target.y - pointer.y) * 0.035;
       root.rotation.y = -0.12 + pointer.x * 0.11 + scrollTarget * 0.04;
@@ -156,7 +162,7 @@ function initialiseScene() {
         const t = (elapsed * particle.userData.speed + particle.userData.offset) % 1;
         particle.position.copy(route.getPointAt(t));
       });
-      ambientParticles.rotation.y = elapsed * 0.012;
+      ambientParticles.rotation.y = configuredMotion === 'reduced' ? elapsed * 0.004 : elapsed * 0.012;
     }
 
     renderer.render(scene, camera);
@@ -411,175 +417,4 @@ function createCodeTexture() {
   });
 
   context.strokeStyle = 'rgba(88,185,255,.16)';
-  context.beginPath();
-  context.moveTo(48, 82);
-  context.lineTo(48, 555);
-  context.stroke();
-  const texture = new THREE.CanvasTexture(textureCanvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.anisotropy = 4;
-  return texture;
-}
-
-function createServer(root, materials) {
-  const server = new THREE.Group();
-  server.position.set(3.55, -0.45, -0.15);
-  server.rotation.y = -0.17;
-  const rack = roundedBox(1.45, 3.05, 1.4, 0.14, materials.dark);
-  server.add(rack);
-  for (let i = 0; i < 5; i += 1) {
-    const tray = roundedBox(1.22, 0.39, 0.08, 0.04, materials.graphiteSoft);
-    tray.position.set(0, 0.98 - i * 0.51, 0.73);
-    server.add(tray);
-    const light = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), i % 2 ? materials.cyan : materials.blue);
-    light.position.set(0.42, 0.98 - i * 0.51, 0.79);
-    server.add(light);
-  }
-  root.add(server);
-  return server;
-}
-
-function createDatabase(root, materials) {
-  const database = new THREE.Group();
-  database.position.set(-3.75, -0.75, 0.3);
-  for (let i = 0; i < 3; i += 1) {
-    const cylinder = new THREE.Mesh(new THREE.CylinderGeometry(0.67, 0.67, 0.46, 40), i === 1 ? materials.blue : materials.graphiteSoft);
-    cylinder.position.y = i * 0.5;
-    database.add(cylinder);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.67, 0.018, 8, 40), materials.cyan);
-    ring.rotation.x = Math.PI / 2;
-    ring.position.y = i * 0.5 + 0.22;
-    database.add(ring);
-  }
-  root.add(database);
-  return database;
-}
-
-function createBrackets(root, materials) {
-  const group = new THREE.Group();
-  group.position.set(3.55, 1.55, -1.15);
-  group.rotation.set(0.05, -0.25, -0.08);
-  const fontTexture = createLabelTexture('</>', '#75e7ff', 180, 90, 42);
-  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: fontTexture, transparent: true, depthWrite: false, toneMapped: false }));
-  sprite.scale.set(2.15, 1.07, 1);
-  group.add(sprite);
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(1.05, 0.012, 8, 64), materials.glass);
-  ring.rotation.x = 1.08;
-  group.add(ring);
-  root.add(group);
-  return group;
-}
-
-function createBadges(root) {
-  const definitions = [
-    ['.NET', -4.0, 2.0, -1.0, '#9f7cff'],
-    ['C#', -2.7, 2.95, -1.65, '#75e7ff'],
-    ['API', 1.7, 3.25, -1.8, '#4f9eff'],
-    ['SQL', 4.2, 2.85, 0.7, '#75e7ff'],
-    ['NG', -4.55, 0.62, -1.75, '#ff6e93'],
-    ['MDB', 4.5, 0.55, -1.5, '#66eba2']
-  ];
-  return definitions.map(([label, x, y, z, color]) => {
-    const texture = createLabelTexture(label, color, 180, 78, label.length > 3 ? 24 : 32);
-    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false, toneMapped: false }));
-    sprite.position.set(x, y, z);
-    sprite.scale.set(1.48, 0.64, 1);
-    sprite.userData.baseY = y;
-    root.add(sprite);
-    return sprite;
-  });
-}
-
-function createLabelTexture(label, color, width, height, fontSize) {
-  const labelCanvas = document.createElement('canvas');
-  labelCanvas.width = width * 2;
-  labelCanvas.height = height * 2;
-  const context = labelCanvas.getContext('2d');
-  context.scale(2, 2);
-  context.fillStyle = 'rgba(6, 12, 23, .87)';
-  roundRect(context, 1, 1, width - 2, height - 2, 16);
-  context.fill();
-  context.strokeStyle = `${color}55`;
-  context.lineWidth = 1;
-  roundRect(context, 1.5, 1.5, width - 3, height - 3, 16);
-  context.stroke();
-  context.fillStyle = color;
-  context.shadowColor = color;
-  context.shadowBlur = 10;
-  context.font = `700 ${fontSize}px monospace`;
-  context.textAlign = 'center';
-  context.textBaseline = 'middle';
-  context.fillText(label, width / 2, height / 2 + 1);
-  const texture = new THREE.CanvasTexture(labelCanvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  return texture;
-}
-
-function createDataFlow(root, materials) {
-  const routePoints = [
-    [new THREE.Vector3(-3.35, 0.2, 0.35), new THREE.Vector3(-2.2, 1.1, -0.25), new THREE.Vector3(-0.9, 0.72, -0.45)],
-    [new THREE.Vector3(1.4, 0.65, -0.35), new THREE.Vector3(2.45, 1.2, 0.15), new THREE.Vector3(3.25, 0.05, -0.05)],
-    [new THREE.Vector3(-0.5, 2.2, -1.25), new THREE.Vector3(0.7, 2.8, -1.4), new THREE.Vector3(2.75, 2.1, -1.2)]
-  ];
-  const routes = routePoints.map((points, index) => {
-    const curve = new THREE.CatmullRomCurve3(points);
-    const tube = new THREE.Mesh(
-      new THREE.TubeGeometry(curve, 32, 0.012, 5, false),
-      new THREE.MeshBasicMaterial({ color: index === 2 ? 0x8f72ff : 0x5acfff, transparent: true, opacity: 0.28, blending: THREE.AdditiveBlending })
-    );
-    root.add(tube);
-    return curve;
-  });
-
-  const particles = Array.from({ length: isMobile ? 6 : 10 }, (_, index) => {
-    const particle = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 10), index % 3 === 0 ? materials.purple : materials.cyan);
-    particle.userData.offset = index / 10;
-    particle.userData.speed = 0.07 + (index % 4) * 0.012;
-    root.add(particle);
-    return particle;
-  });
-  return { routes, particles };
-}
-
-function createParticles(root) {
-  const count = isMobile ? 45 : 90;
-  const positions = new Float32Array(count * 3);
-  for (let i = 0; i < count; i += 1) {
-    positions[i * 3] = (Math.random() - 0.5) * 12;
-    positions[i * 3 + 1] = Math.random() * 6 - 2;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 6 - 0.8;
-  }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const particles = new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0x79cfff, size: 0.025, transparent: true, opacity: 0.45, depthWrite: false }));
-  root.add(particles);
-  return particles;
-}
-
-function roundedBox(width, height, depth, radius, material) {
-  const shape = new THREE.Shape();
-  const x = -width / 2;
-  const y = -height / 2;
-  shape.moveTo(x + radius, y);
-  shape.lineTo(x + width - radius, y);
-  shape.quadraticCurveTo(x + width, y, x + width, y + radius);
-  shape.lineTo(x + width, y + height - radius);
-  shape.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-  shape.lineTo(x + radius, y + height);
-  shape.quadraticCurveTo(x, y + height, x, y + height - radius);
-  shape.lineTo(x, y + radius);
-  shape.quadraticCurveTo(x, y, x + radius, y);
-  const geometry = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: radius * 0.35, bevelThickness: radius * 0.35 });
-  geometry.center();
-  return new THREE.Mesh(geometry, material);
-}
-
-function roundRect(context, x, y, width, height, radius) {
-  context.beginPath();
-  context.moveTo(x + radius, y);
-  context.arcTo(x + width, y, x + width, y + height, radius);
-  context.arcTo(x + width, y + height, x, y + height, radius);
-  context.arcTo(x, y + height, x, y, radius);
-  context.arcTo(x, y, x + width, y, radius);
-  context.closePath();
-}
+  conte

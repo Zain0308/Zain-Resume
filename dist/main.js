@@ -66,7 +66,7 @@
   }
 
   const typedRole = document.querySelector('#typedRole');
-  const roleLines = [
+  let roleLines = [
     'Building scalable REST APIs...',
     'Developing enterprise .NET applications...',
     'Integrating banking & payment APIs...',
@@ -74,6 +74,10 @@
     'Developing AI-powered solutions...',
     'Optimizing production systems...'
   ];
+  window.__setPortfolioTypingLines = (value) => {
+    const lines = String(value || '').split(/\n+/).map((line) => line.trim()).filter(Boolean).slice(0, 12);
+    if (lines.length) roleLines = lines;
+  };
   if (typedRole && !prefersReducedMotion) {
     let roleIndex = 0;
     let charIndex = roleLines[0].length;
@@ -326,7 +330,8 @@
     ctx.clearRect(0, 0, width, height);
     const links = findLinks();
 
-    if (!prefersReducedMotion) {
+    const networkMotion = document.documentElement.dataset.portfolioNetwork || 'full';
+    if (networkMotion !== 'off' && !prefersReducedMotion) {
       nodes.forEach((node) => {
         node.x += node.vx;
         node.y += node.vy;
@@ -362,7 +367,7 @@
       ctx.fill();
     });
 
-    if (!prefersReducedMotion && links.length) {
+    if (networkMotion !== 'off' && !prefersReducedMotion && links.length) {
       pulses.forEach((pulse, index) => {
         if (!pulse.link || !nodes[pulse.link.a] || !nodes[pulse.link.b]) {
           pulse.link = links[Math.floor(Math.random() * links.length)];
@@ -398,238 +403,4 @@
   }, { passive: true });
   document.addEventListener('visibilitychange', () => {
     visible = !document.hidden;
-    cancelAnimationFrame(frame);
-    if (visible) frame = requestAnimationFrame(drawNetwork);
-  });
-
-  resizeNetwork();
-  if (prefersReducedMotion) drawNetwork(0);
-  else frame = requestAnimationFrame(drawNetwork);
-
-  root.classList.add('enhanced');
-})();
-
-(() => {
-  const section = document.querySelector('#live-portfolio');
-  const grid = document.querySelector('#livePortfolioGrid');
-  if (!section || !grid) return;
-
-  const categoryLabels = {
-    project: 'Project update',
-    experience: 'Experience update',
-    skills: 'Skills update',
-    education: 'Education update',
-    contact: 'Contact update',
-    profile: 'Profile update'
-  };
-
-  const node = (tag, className, value) => {
-    const element = document.createElement(tag);
-    if (className) element.className = className;
-    if (value) element.textContent = value;
-    return element;
-  };
-
-  const detailsFor = (item) => {
-    const title = String(item.title || item.project || item.company || 'Portfolio update');
-    const escapedTitle = title.replace(/[\^$.*+?()[\]{}|]/g, '\\$&');
-    return {
-      category: String(item.category || 'profile'),
-      title,
-      content: String(item.content || '').replace(new RegExp('^' + escapedTitle + '\\.\\s*', 'i'), ''),
-      meta: [item.company, item.role, item.project].filter(Boolean).map(String).slice(0, 5),
-      mediaUrl: String(item.mediaUrl || ''),
-      institution: String(item.institution || ''),
-      startDate: String(item.startDate || ''),
-      endDate: String(item.endDate || ''),
-      contactValue: String(item.contactValue || ''),
-      contactUrl: String(item.contactUrl || ''),
-      tags: []
-    };
-  };
-
-  const parseManualText = (value) => {
-    const tags = [];
-    const lines = String(value || '').split(/\n+/).map((line) => line.trim()).filter(Boolean);
-    const body = [];
-    const inlineBulletPattern = /(?:^|\s)[-*•]\s+(.+?)(?=\s+[-*•]\s+|$)/g;
-    lines.forEach((line) => {
-      if (/^[-*•]\s+/.test(line)) {
-        const tag = line.replace(/^[-*•]\s+/, '').trim();
-        if (tag) tags.push(tag);
-        return;
-      }
-      const matches = [...line.matchAll(inlineBulletPattern)];
-      if (matches.length) {
-        matches.forEach((match) => {
-          const tag = String(match[1] || '').trim();
-          if (tag) tags.push(tag);
-        });
-        body.push(line.replace(inlineBulletPattern, ' ').trim());
-      } else {
-        body.push(line);
-      }
-    });
-    return {
-      body: body.join(' ').replace(/^#{1,6}\s+/g, '').replace(/\*\*(.*?)\*\*/g, '$1').replace(/\x60([^\x60]+)\x60/g, '$1').replace(/\s+/g, ' ').trim(),
-      tags
-    };
-  };
-
-  const technologyCatalog = [
-    ['ASP.NET Core', /\basp\.?net core\b/i], ['ASP.NET MVC', /\basp\.?net mvc\b/i], ['ASP.NET', /\basp\.?net\b/i],
-    ['.NET Core', /\.net core\b/i], ['.NET', /\.net\b/i], ['C#', /\bc#\b/i], ['Angular', /\bangular\b/i],
-    ['TypeScript', /\btypescript\b/i], ['JavaScript', /\bjavascript\b/i], ['jQuery', /\bjquery\b/i], ['AJAX', /\bajax\b/i],
-    ['HTML', /\bhtml5?\b/i], ['CSS', /\bcss3?\b/i], ['Bootstrap', /\bbootstrap\b/i], ['Node.js', /\bnode(?:\.js|js)\b/i],
-    ['Express.js', /\bexpress(?:\.js|js)\b/i], ['SQL Server', /\bsql server\b/i], ['MongoDB', /\bmongodb\b/i], ['MySQL', /\bmysql\b/i],
-    ['PostgreSQL', /\bpostgres(?:ql)?\b/i], ['Redis', /\bredis\b/i], ['EF Core', /\b(?:entity framework core|ef core)\b/i],
-    ['Dapper', /\bdapper\b/i], ['ADO.NET', /\bado\.?net\b/i], ['REST APIs', /\brest(?:ful)? api(?:s)?\b/i], ['Web APIs', /\bweb api(?:s)?\b/i],
-    ['SOAP', /\bsoap\b/i], ['SignalR', /\bsignalr\b/i], ['WebSockets', /\bwebsocket(?:s)?\b/i], ['JWT', /\bjwt\b/i],
-    ['Microservices', /\bmicroservices?\b/i], ['Docker', /\bdocker\b/i], ['Kubernetes', /\bkubernetes\b/i], ['Azure', /\bazure\b/i],
-    ['Azure OpenAI', /\bazure openai\b/i], ['OpenAI', /\bopenai\b/i], ['GPT', /\bgpt(?:-\d+)?\b/i], ['React', /\breact(?:\.js)?\b/i],
-    ['Flutter', /\bflutter\b/i], ['Python', /\bpython\b/i], ['Java', /\bjava\b/i], ['Git', /\bgit(?:hub|lab)?\b/i],
-    ['Jenkins', /\bjenkins\b/i], ['Swagger', /\bswagger\b/i], ['Postman', /\bpostman\b/i], ['Salesforce', /\bsalesforce\b/i]
-  ];
-
-  const technologyTags = (text, candidates = []) => {
-    const source = String(text || '');
-    const found = technologyCatalog.filter(([, pattern]) => pattern.test(source)).map(([label]) => label);
-    const candidateTech = candidates.filter((candidate) => technologyCatalog.some(([label, pattern]) => pattern.test(candidate) || label.toLowerCase() === candidate.toLowerCase()));
-    const combined = [...new Set([...found, ...candidateTech])];
-    return combined.filter((label) => !combined.some((other) => other !== label && other.toLowerCase().includes(label.toLowerCase()))).slice(0, 8);
-  };
-
-  const safeMediaUrl = (value) => {
-    const candidate = String(value || '').trim();
-    if (!candidate) return '';
-    try {
-      const parsed = new URL(candidate, window.location.origin);
-      if (parsed.protocol === 'http:' || parsed.protocol === 'https:') return parsed.href;
-    } catch { /* Ignore invalid media URLs. */ }
-    return '';
-  };
-
-  const formatDate = (value) => {
-    const raw = String(value || '').trim();
-    if (!raw) return '';
-    const parsed = new Date(`${raw}T00:00:00`);
-    return Number.isNaN(parsed.getTime()) ? raw : new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric' }).format(parsed);
-  };
-  const formatDateRange = (start, end) => {
-    const startLabel = formatDate(start);
-    const endLabel = formatDate(end) || (startLabel ? 'Present' : '');
-    return startLabel && endLabel ? `${startLabel} — ${endLabel}` : startLabel || endLabel;
-  };
-
-  const appendProject = (item, details) => {
-    const projectGrid = document.querySelector('.project-grid');
-    if (!projectGrid) return false;
-    const card = node('article', 'project-card dynamic-project-card');
-    const number = node('div', 'project-no', 'LIVE / PROJECT');
-    const body = node('div', 'project-body');
-    body.append(node('p', 'project-kicker', details.meta[0] || 'Portfolio update'), node('h3', '', details.title), node('p', '', details.content));
-    const tags = node('ul', 'tag-list');
-    details.tags.slice(0, 8).forEach((tag) => tags.append(node('li', '', tag)));
-    body.append(tags);
-    const mediaUrl = safeMediaUrl(details.mediaUrl);
-    if (mediaUrl) {
-      const visual = node('div', 'project-visual dynamic-project-media');
-      const image = document.createElement('img');
-      image.src = mediaUrl;
-      image.alt = `${details.title} preview`;
-      image.loading = 'lazy';
-      image.decoding = 'async';
-      image.addEventListener('error', () => visual.remove(), { once: true });
-      visual.append(image);
-      card.append(number, visual, body);
-    } else {
-      card.append(number, body);
-    }
-    projectGrid.append(card);
-    return true;
-  };
-
-  const appendExperience = (item, details) => {
-    const timeline = document.querySelector('.timeline');
-    if (!timeline) return false;
-    const entry = node('article', 'timeline-item dynamic-timeline-item');
-    const date = node('div', 'timeline-date', formatDateRange(details.startDate, details.endDate) || 'Recently added');
-    const marker = node('div', 'timeline-marker');
-    marker.append(node('span'));
-    const copy = node('div', 'timeline-copy');
-    copy.append(node('p', details.meta[0] || 'Professional experience'), node('h3', '', details.title), node('span', '', details.content));
-    const tags = node('div', 'timeline-tags');
-    details.tags.slice(0, 8).forEach((tag) => tags.append(node('i', '', tag)));
-    copy.append(tags);
-    entry.append(date, marker, copy, node('b', 'LIVE'));
-    timeline.append(entry);
-    return true;
-  };
-
-  const appendSkill = (item, details) => {
-    const expertiseGrid = document.querySelector('.expertise-grid');
-    if (!expertiseGrid) return false;
-    const card = node('article', 'expertise-card dynamic-expertise-card');
-    card.append(node('span', 'expertise-icon', '{ }'), node('p', 'card-index', 'LIVE'), node('h3', '', details.title), node('p', '', details.content));
-    const cloud = node('div', 'skill-cloud');
-    [details.title, ...details.tags].slice(0, 8).forEach((tag) => cloud.append(node('span', '', tag)));
-    card.append(cloud);
-    expertiseGrid.append(card);
-    return true;
-  };
-
-  const appendEducation = (item, details) => {
-    const education = document.querySelector('.education');
-    if (!education) return false;
-    const copy = node('p');
-    const institution = details.institution || details.meta[0] || 'Education';
-    const dateRange = formatDateRange(details.startDate, details.endDate);
-    copy.append(node('strong', '', details.title), document.createElement('br'), document.createTextNode(institution + (dateRange ? ` · ${dateRange}` : '')), document.createElement('br'), document.createTextNode(details.content));
-    education.parentElement?.append(node('div', 'education dynamic-education', ''));
-    const entry = education.parentElement?.lastElementChild;
-    if (!entry) return false;
-    entry.append(node('span', '', 'UPDATED'), copy);
-    return true;
-  };
-
-  const render = (items) => {
-    if (!Array.isArray(items) || !items.length) return;
-    const fallback = [];
-    items.forEach((item) => {
-      const details = detailsFor(item);
-      const parsedContent = parseManualText(details.content);
-      details.content = parsedContent.body || details.content;
-      details.tags = Array.isArray(item.stack)
-        ? [...new Set(item.stack.map((value) => String(value).trim()).filter(Boolean))].slice(0, 8)
-        : technologyTags(details.title + ' ' + details.content, parsedContent.tags);
-      const rendered = details.category === 'project' ? appendProject(item, details)
-        : details.category === 'experience' ? appendExperience(item, details)
-          : details.category === 'skills' ? appendSkill(item, details)
-            : details.category === 'education' ? appendEducation(item, details)
-              : false;
-      if (!rendered) fallback.push({ item, details });
-    });
-    if (!fallback.length) return;
-    const fragment = document.createDocumentFragment();
-    fallback.forEach(({ details }) => {
-      const card = node('article', 'live-portfolio-card');
-      const kicker = node('p', 'live-kicker', categoryLabels[details.category] || 'Portfolio update');
-      const heading = node('h3', '', details.title);
-      const meta = details.meta.length ? node('p', 'live-meta', details.meta.join(' · ')) : null;
-      const body = node('p', 'live-content', details.content || details.title);
-      const tags = node('ul', 'live-tags');
-      details.tags.slice(0, 6).forEach((tag) => tags.append(node('li', '', tag)));
-      card.append(kicker, heading);
-      if (meta) card.append(meta);
-      card.append(body, tags);
-      fragment.append(card);
-    });
-    grid.replaceChildren(fragment);
-    section.hidden = false;
-  };
-
-  fetch('/api/portfolio/content', { headers: { accept: 'application/json' }, credentials: 'same-origin' })
-    .then((response) => response.ok ? response.json() : null)
-    .then((data) => render(data?.items))
-    .catch(() => {});
-})();
+ 
